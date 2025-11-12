@@ -2,7 +2,7 @@
 
 **Project:** Toniebox-Alternative - Raspberry Pi Music Player für Kinder
 
-**Status:** Phase 0 - Setup ⚙️
+**Status:** Phase 1 - Foundation ✅
 
 ---
 
@@ -11,7 +11,7 @@
 | Phase | Name                      | Status       | Progress |
 | ----- | ------------------------- | ------------ | -------- |
 | 0     | Setup & Dependencies      | ✅ COMPLETED | 7/7      |
-| 1     | Foundation                | ⏳ PENDING   | 0/3      |
+| 1     | Foundation                | ✅ COMPLETED | 3/3      |
 | 2     | Managers                  | ⏳ PENDING   | 0/3      |
 | 3     | UI (Player + Admin)       | ⏳ PENDING   | 0/4      |
 | 4     | Testing & Polish          | ⏳ PENDING   | 0/3      |
@@ -68,16 +68,16 @@ git commit -m "chore: setup project structure and dependencies"
 
 ### Tasks
 
-- [ ] **1.1** Define types in `src/lib/types.ts`:
+- [x] **1.1** Define types in `src/lib/types.ts`:
   - `Card` type (id, folderName, assignedAt)
   - `Folder` type (name, songs, path)
   - `Song` type (filename, path, title)
   - `Playlist` type (folder, songs, currentIndex)
-- [ ] **1.2** Implement `src/lib/server/database.ts` (lowdb v7):
+- [x] **1.2** Implement `src/lib/server/database.ts` (lowdb v7):
   - Initialize database
   - CRUD operations: getCardMapping, setCardMapping, deleteCardMapping, getAllMappings
   - Type-safe with TypeScript
-- [ ] **1.3** Implement `src/lib/server/fileManager.ts`:
+- [x] **1.3** Implement `src/lib/server/fileManager.ts`:
   - Scan `/music` folder
   - Get all folders (playlists)
   - Get MP3s in folder
