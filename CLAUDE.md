@@ -2,6 +2,17 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Author
+
+**David Weigend**
+
+- Email: david.weigend@gmail.com
+- X: @weigend
+- Web: weigend.studio
+- GitHub: https://github.com/dweigend
+
+---
+
 ## Project: kinder_audio_2
 
 **Toniebox-Alternative** - Raspberry Pi Music Player für Kinder

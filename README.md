@@ -1,38 +1,131 @@
-# sv
+# kinder_audio_2
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+**Toniebox-Alternative** - Raspberry Pi Music Player für Kinder
 
-## Creating a project
+Ein RFID-gesteuerter Musikplayer für Kinder, der auf einem Raspberry Pi läuft. RFID-Karten steuern die Musikwiedergabe, ein USB-Controller (W/E/R Tasten) ermöglicht Playback-Kontrolle, und ein Web-Admin-Interface verwaltet die Karten-Zuordnungen.
 
-If you're seeing this, you've probably already done this step. Congrats!
+## Author
 
-```sh
-# create a new project in the current directory
-npx sv create
+**David Weigend**
 
-# create a new project in my-app
-npx sv create my-app
+- Email: david.weigend@gmail.com
+- X: [@weigend](https://x.com/weigend)
+- Web: [weigend.studio](https://weigend.studio)
+- GitHub: [@dweigend](https://github.com/dweigend)
+
+## Tech Stack
+
+- **SvelteKit** - Full-Stack Framework (SSR + API Routes)
+- **Svelte 5** - UI with `$state` runes
+- **Tailwind CSS + DaisyUI** - Styling
+- **howler.js** - Audio playback
+- **lowdb** - JSON database
+- **Bun** - Package manager & runtime
+
+## Features
+
+- 🎵 RFID card-controlled music playback
+- 🎹 USB keyboard controls (W/E/R for prev/pause/next)
+- 🖥️ Web admin interface for card management
+- 🔊 Auto-play next song
+- 📁 Folder-based playlists
+- 🎨 Minimalist, kid-friendly UI
+
+## Project Structure
+
+```
+src/
+├── routes/
+│   ├── +page.svelte              # Player UI
+│   ├── +page.server.ts           # Data loader
+│   └── admin/
+│       ├── +page.svelte          # Admin Interface
+│       └── +page.server.ts       # Form actions
+├── lib/
+│   ├── managers/                 # Client managers
+│   │   ├── AudioManager.svelte.ts      # howler.js wrapper
+│   │   ├── RFIDManager.svelte.ts       # RFID input handler
+│   │   └── KeyboardManager.svelte.ts   # W/E/R controls
+│   ├── server/                   # Server-only
+│   │   ├── database.ts           # lowdb CRUD
+│   │   └── fileManager.ts        # File operations
+│   └── types.ts                  # Shared types
+music/                            # MP3 folders
+data/db.json                      # Card mappings
 ```
 
-## Developing
+## Getting Started
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+### Prerequisites
 
-```sh
-npm run dev
+- [Bun](https://bun.sh) (>= 1.0)
+- Raspberry Pi (for hardware deployment)
+- RFID USB scanner (10-digit input)
+- CH57x USB controller (optional, for W/E/R keys)
 
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
+### Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/dweigend/kinder_audio_2.git
+cd kinder_audio_2
+
+# Install dependencies
+bun install
 ```
 
-## Building
+### Development
 
-To create a production version of your app:
+```bash
+# Start dev server
+bun run dev
 
-```sh
-npm run build
+# Type check
+bun run check
+
+# Lint & format
+bun run lint
+bun run format
+
+# Tests
+bun run test
 ```
 
-You can preview the production build with `npm run preview`.
+### Production Build
 
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+```bash
+# Build for production
+bun run build
+
+# Preview production build
+bun run preview
+```
+
+## Deployment
+
+See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) (coming in Phase 5) for Raspberry Pi deployment instructions.
+
+## Hardware Setup
+
+1. **RFID Scanner**: Connect USB RFID scanner (sends 10 digits + ENTER)
+2. **Controller**: Connect CH57x USB controller (W/E/R keys)
+3. **Audio**: Connect speakers/amplifier via 3.5mm jack or USB audio
+
+## Development Roadmap
+
+See [PLAN.md](PLAN.md) for detailed development phases.
+
+- ✅ Phase 0: Setup & Dependencies
+- ✅ Phase 1: Foundation (Types, DB, FileManager)
+- ✅ Phase 2: Managers (Audio, RFID, Keyboard)
+- ⏳ Phase 3: UI (Player + Admin)
+- ⏳ Phase 4: Testing & Polish
+- ⏳ Phase 5: Deployment (Raspberry Pi)
+
+## License
+
+MIT
+
+## Acknowledgments
+
+Built with [Claude Code](https://claude.com/claude-code)

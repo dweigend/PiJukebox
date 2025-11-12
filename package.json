@@ -3,6 +3,15 @@
 	"private": true,
 	"version": "0.0.1",
 	"type": "module",
+	"author": {
+		"name": "David Weigend",
+		"email": "david.weigend@gmail.com",
+		"url": "https://weigend.studio"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/dweigend/kinder_audio_2"
+	},
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build",
