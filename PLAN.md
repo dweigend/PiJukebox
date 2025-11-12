@@ -2,7 +2,7 @@
 
 **Project:** Toniebox-Alternative - Raspberry Pi Music Player für Kinder
 
-**Status:** Phase 1 - Foundation ✅
+**Status:** Phase 2 - Managers ✅
 
 ---
 
@@ -12,7 +12,7 @@
 | ----- | ------------------------- | ------------ | -------- |
 | 0     | Setup & Dependencies      | ✅ COMPLETED | 7/7      |
 | 1     | Foundation                | ✅ COMPLETED | 3/3      |
-| 2     | Managers                  | ⏳ PENDING   | 0/3      |
+| 2     | Managers                  | ✅ COMPLETED | 3/3      |
 | 3     | UI (Player + Admin)       | ⏳ PENDING   | 0/4      |
 | 4     | Testing & Polish          | ⏳ PENDING   | 0/3      |
 | 5     | Deployment (Raspberry Pi) | ⏳ PENDING   | 0/5      |
@@ -105,17 +105,17 @@ git commit -m "feat: add types, database wrapper, and file manager"
 
 ### Tasks
 
-- [ ] **2.1** Implement `src/lib/managers/AudioManager.svelte.ts`:
+- [x] **2.1** Implement `src/lib/managers/AudioManager.svelte.ts`:
   - Wrap howler.js with `$state` runes
   - Methods: loadPlaylist, play, pause, next, previous
   - State: currentSong, isPlaying, playlist
   - Auto-play next song when current ends
-- [ ] **2.2** Implement `src/lib/managers/RFIDManager.svelte.ts`:
+- [x] **2.2** Implement `src/lib/managers/RFIDManager.svelte.ts`:
   - Listen for keyboard input (10 digits + ENTER)
   - Debounce input collection
   - Emit card ID when ENTER pressed
   - Use `$state` for current input
-- [ ] **2.3** Implement `src/lib/managers/KeyboardManager.svelte.ts`:
+- [x] **2.3** Implement `src/lib/managers/KeyboardManager.svelte.ts`:
   - Listen for W/E/R key presses
   - Emit events: previous, pause, next
   - Use `$state` for tracking key state
@@ -124,8 +124,8 @@ git commit -m "feat: add types, database wrapper, and file manager"
 
 **Before implementation:**
 
-- [ ] Fetch Svelte 5 docs: `mcp__svelte__get-documentation(["$state", "$derived", "$effect"])`
-- [ ] Fetch howler.js docs: `mcp__context7__get-library-docs("/goldfire/howler.js")`
+- [x] Fetch Svelte 5 docs: `mcp__svelte__get-documentation(["$state", "$derived", "$effect"])`
+- [x] Fetch howler.js docs: `mcp__context7__get-library-docs("/goldfire/howler.js")`
 
 ### Definition of Done
 
