@@ -1,4 +1,4 @@
-# kinder_audio_2
+# PiJukebox
 
 **Toniebox Alternative** - RFID Music Player for Children
 
