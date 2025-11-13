@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import { formatTitle } from '$lib/utils/formatters';
 	import type { PageData, ActionData } from './$types';
 
 	let { data, form }: { data: PageData; form: ActionData } = $props();
@@ -66,10 +67,10 @@
 							</tr>
 						</thead>
 						<tbody>
-							{#each data.mappings as mapping}
+							{#each data.mappings as mapping (mapping.cardId)}
 								<tr>
 									<td><code class="text-sm">{mapping.cardId}</code></td>
-									<td>{mapping.folderName}</td>
+									<td>{formatTitle(mapping.folderName)}</td>
 									<td>
 										<span class="badge badge-sm badge-info">{mapping.songCount} songs</span>
 									</td>
@@ -112,8 +113,8 @@
 					<legend class="fieldset-legend">Music Folder</legend>
 					<select name="folderName" class="select-bordered select w-full" required>
 						<option disabled selected>Select a folder</option>
-						{#each data.folders as folder}
-							<option value={folder}>{folder}</option>
+						{#each data.folders as folder (folder)}
+							<option value={folder}>{formatTitle(folder)}</option>
 						{/each}
 					</select>
 					<label class="label">Choose the music folder for this card</label>
@@ -154,10 +155,10 @@
 		</div>
 	</div>
 
-	<!-- Section 4: Upload MP3 -->
+	<!-- Section 4: Upload MP3s -->
 	<div class="card border border-base-content/5 bg-base-100">
 		<div class="card-body">
-			<h2 class="card-title">Upload MP3 to Folder</h2>
+			<h2 class="card-title">Upload MP3s to Folder</h2>
 
 			<form
 				method="POST"
@@ -170,27 +171,28 @@
 					<legend class="fieldset-legend">Target Folder</legend>
 					<select name="folderName" class="select-bordered select w-full" required>
 						<option disabled selected>Select a folder</option>
-						{#each data.folders as folder}
-							<option value={folder}>{folder}</option>
+						{#each data.folders as folder (folder)}
+							<option value={folder}>{formatTitle(folder)}</option>
 						{/each}
 					</select>
 					<label class="label">Choose the destination folder</label>
 				</fieldset>
 
 				<fieldset class="fieldset">
-					<legend class="fieldset-legend">MP3 File</legend>
+					<legend class="fieldset-legend">MP3 Files</legend>
 					<input
 						type="file"
 						name="mp3File"
 						accept=".mp3,audio/mpeg"
 						class="file-input-bordered file-input w-full"
+						multiple
 						required
 					/>
-					<label class="label">Max file size: 10MB</label>
+					<label class="label">Select one or more MP3 files (max 10MB each)</label>
 				</fieldset>
 
 				<div class="card-actions justify-end">
-					<button type="submit" class="btn btn-accent">Upload MP3</button>
+					<button type="submit" class="btn btn-accent">Upload MP3s</button>
 				</div>
 			</form>
 		</div>

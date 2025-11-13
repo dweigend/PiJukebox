@@ -5,6 +5,12 @@
 
 import { fail } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
+import {
+	CARD_ID_LENGTH,
+	CARD_ID_PATTERN,
+	FOLDER_NAME_PATTERN,
+	UPLOAD_MAX_SIZE_BYTES
+} from '$lib/constants';
 import { getAllMappings, setCardMapping, deleteCardMapping } from '$lib/server/database';
 import {
 	getAllFolders,
@@ -52,8 +58,8 @@ export const actions: Actions = {
 		const folderName = formData.get('folderName')?.toString();
 
 		// Validation
-		if (!cardId || cardId.length !== 10 || !/^\d{10}$/.test(cardId)) {
-			return fail(400, { error: 'Card ID must be exactly 10 digits' });
+		if (!cardId || cardId.length !== CARD_ID_LENGTH || !CARD_ID_PATTERN.test(cardId)) {
+			return fail(400, { error: `Card ID must be exactly ${CARD_ID_LENGTH} digits` });
 		}
 
 		if (!folderName) {
@@ -106,7 +112,7 @@ export const actions: Actions = {
 		}
 
 		// Check for invalid characters
-		if (!/^[a-z0-9_-]+$/i.test(folderName)) {
+		if (!FOLDER_NAME_PATTERN.test(folderName)) {
 			return fail(400, {
 				error: 'Folder name can only contain letters, numbers, underscores, and hyphens'
 			});
@@ -128,31 +134,20 @@ export const actions: Actions = {
 	},
 
 	/**
-	 * Upload MP3 to folder
+	 * Upload MP3(s) to folder
 	 */
 	uploadMP3: async ({ request }) => {
 		const formData = await request.formData();
 		const folderName = formData.get('folderName')?.toString();
-		const file = formData.get('mp3File') as File | null;
+		const files = formData.getAll('mp3File') as File[];
 
 		// Validation
 		if (!folderName) {
 			return fail(400, { error: 'Folder name is required' });
 		}
 
-		if (!file || file.size === 0) {
-			return fail(400, { error: 'MP3 file is required' });
-		}
-
-		// Check file type
-		if (!file.name.toLowerCase().endsWith('.mp3')) {
-			return fail(400, { error: 'Only MP3 files are allowed' });
-		}
-
-		// Check file size (max 10MB)
-		const maxSize = 10 * 1024 * 1024; // 10MB
-		if (file.size > maxSize) {
-			return fail(400, { error: 'File size must be less than 10MB' });
+		if (!files || files.length === 0 || files[0].size === 0) {
+			return fail(400, { error: 'At least one MP3 file is required' });
 		}
 
 		// Check if folder exists
@@ -161,13 +156,31 @@ export const actions: Actions = {
 			return fail(400, { error: 'Selected folder does not exist' });
 		}
 
-		// Save MP3
-		const buffer = Buffer.from(await file.arrayBuffer());
-		await saveMP3(folderName, file.name, buffer);
+		// Validate and upload each file
+		const uploadedFiles: string[] = [];
+		for (const file of files) {
+			// Check file type
+			if (!file.name.toLowerCase().endsWith('.mp3')) {
+				return fail(400, { error: `File "${file.name}" is not an MP3 file` });
+			}
+
+			// Check file size
+			if (file.size > UPLOAD_MAX_SIZE_BYTES) {
+				return fail(400, { error: `File "${file.name}" exceeds 10MB limit` });
+			}
+
+			// Save MP3
+			const buffer = Buffer.from(await file.arrayBuffer());
+			await saveMP3(folderName, file.name, buffer);
+			uploadedFiles.push(file.name);
+		}
 
 		return {
 			success: true,
-			message: `File "${file.name}" uploaded to ${folderName}`
+			message:
+				uploadedFiles.length === 1
+					? `File "${uploadedFiles[0]}" uploaded to ${folderName}`
+					: `${uploadedFiles.length} files uploaded to ${folderName}`
 		};
 	}
 };

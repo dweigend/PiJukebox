@@ -3,6 +3,8 @@
  * RFID scanner sends 10 digits + ENTER key
  */
 
+import { CARD_ID_LENGTH, INPUT_RESET_TIMEOUT_MS } from '$lib/constants';
+
 class RFIDManager {
 	// Reactive state
 	currentInput = $state('');
@@ -52,8 +54,8 @@ class RFIDManager {
 		// Reset timeout - new input received
 		this.#resetTimeout();
 
-		// Automatically process if 10 digits reached
-		if (this.currentInput.length === 10) {
+		// Automatically process if CARD_ID_LENGTH digits reached
+		if (this.currentInput.length === CARD_ID_LENGTH) {
 			this.#processCard();
 		}
 	};
@@ -62,7 +64,7 @@ class RFIDManager {
 	 * Process scanned card ID
 	 */
 	#processCard() {
-		if (this.currentInput.length !== 10) {
+		if (this.currentInput.length !== CARD_ID_LENGTH) {
 			this.#reset();
 			return;
 		}
@@ -91,10 +93,10 @@ class RFIDManager {
 	#resetTimeout() {
 		this.#clearTimeout();
 
-		// Auto-reset after 2 seconds of no input
+		// Auto-reset after INPUT_RESET_TIMEOUT_MS of no input
 		this.#inputTimeout = setTimeout(() => {
 			this.#reset();
-		}, 2000);
+		}, INPUT_RESET_TIMEOUT_MS);
 	}
 
 	/**

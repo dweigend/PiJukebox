@@ -3,9 +3,7 @@
 	import { audioManager } from '$lib/managers/AudioManager.svelte';
 	import { rfidManager } from '$lib/managers/RFIDManager.svelte';
 	import { keyboardManager } from '$lib/managers/KeyboardManager.svelte';
-	import type { PageData } from './$types';
-
-	let { data }: { data: PageData } = $props();
+	import { formatTitle } from '$lib/utils/formatters';
 
 	let errorMessage = $state<string | null>(null);
 	let unassignedCardId = $state<string | null>(null);
@@ -107,7 +105,7 @@
 						>Card ID: <code class="rounded bg-base-200 px-2 py-1">{unassignedCardId}</code></span
 					>
 				</div>
-				<a href="/admin" class="btn btn-sm btn-primary">Assign in Admin</a>
+				<a href="/admin" data-sveltekit-reload class="btn btn-sm btn-primary">Assign in Admin</a>
 			</div>
 		{/if}
 
@@ -134,50 +132,40 @@
 		<!-- Player Card -->
 		{#if audioManager.currentSong}
 			<div class="card border-2 border-base-300 bg-base-100 shadow-xl">
-				<div class="card-body">
-					<!-- Status Indicator -->
-					<div class="indicator mb-4 w-full">
-						<span
-							class="indicator-item badge badge-lg"
-							class:badge-success={audioManager.isPlaying}
-							class:badge-neutral={!audioManager.isPlaying}
-						>
-							{audioManager.isPlaying ? '▶ Playing' : '⏸ Paused'}
-						</span>
-						<div class="flex w-full items-center justify-center bg-base-200 p-8">
-							<div class="text-8xl">🎵</div>
-						</div>
+				<div class="card-body items-center space-y-6 text-center">
+					<!-- Music Icon -->
+					<div class="text-9xl">🎵</div>
+
+					<!-- Status Badge -->
+					<div
+						class="badge gap-2 badge-lg"
+						class:badge-success={audioManager.isPlaying}
+						class:badge-neutral={!audioManager.isPlaying}
+					>
+						{audioManager.isPlaying ? '▶ Playing' : '⏸ Paused'}
 					</div>
 
-					<!-- Song Info Stats -->
-					<div class="stats w-full stats-vertical bg-base-200 shadow">
-						<div class="stat place-items-center">
-							<div class="stat-title">Now Playing</div>
-							<div class="stat-value text-2xl text-primary">
-								{audioManager.currentSong.title}
-							</div>
-						</div>
+					<!-- Song Info -->
+					<div class="space-y-2">
+						<h2 class="text-3xl font-bold text-primary">
+							{audioManager.currentSong.title}
+						</h2>
 
 						{#if audioManager.playlist}
-							<div class="stat place-items-center">
-								<div class="stat-title">Album</div>
-								<div class="stat-value text-base">
-									{audioManager.playlist.folder.name}
-								</div>
-							</div>
+							<p class="text-lg opacity-70">
+								{formatTitle(audioManager.playlist.folder.name)}
+							</p>
 
-							<div class="stat place-items-center">
-								<div class="stat-title">Track</div>
-								<div class="stat-value text-base text-accent">
-									{audioManager.playlist.currentIndex + 1} / {audioManager.playlist.songs.length}
-								</div>
-							</div>
+							<p class="text-sm font-medium text-accent">
+								Track {audioManager.playlist.currentIndex + 1} of {audioManager.playlist.songs
+									.length}
+							</p>
 						{/if}
 					</div>
 
 					<!-- Controls Info -->
 					<div class="divider my-2"></div>
-					<div class="text-center text-sm opacity-60">
+					<div class="text-sm opacity-60">
 						<kbd class="kbd kbd-sm">W</kbd>
 						Previous |
 						<kbd class="kbd kbd-sm">E</kbd>

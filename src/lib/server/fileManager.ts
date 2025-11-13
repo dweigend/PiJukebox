@@ -4,6 +4,7 @@
 
 import { readdir, stat, mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
+import { formatTitle } from '$lib/utils/formatters';
 import type { Folder, Song } from '$lib/types';
 
 const MUSIC_DIR = 'static/music';
@@ -46,7 +47,7 @@ export async function getFolderSongs(folderName: string): Promise<Song[]> {
 	return mp3Files.map((filename) => ({
 		filename,
 		path: `/music/${folderName}/${filename}`,
-		title: deriveTitle(filename)
+		title: formatTitle(filename)
 	}));
 }
 
@@ -66,19 +67,6 @@ export async function getFolder(folderName: string): Promise<Folder | null> {
 		songs,
 		path: `/music/${folderName}`
 	};
-}
-
-/**
- * Derive song title from filename
- * Example: "01_song_name.mp3" -> "Song Name"
- */
-function deriveTitle(filename: string): string {
-	return filename
-		.replace(/\.mp3$/i, '') // Remove extension
-		.replace(/^\d+[_-]/, '') // Remove leading number prefix (01_, 02-)
-		.replace(/[_-]/g, ' ') // Replace underscores/hyphens with spaces
-		.trim()
-		.replace(/\b\w/g, (char) => char.toUpperCase()); // Capitalize words
 }
 
 /**
