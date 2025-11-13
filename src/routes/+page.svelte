@@ -65,17 +65,17 @@
 	});
 </script>
 
-<div class="bg-base-200 flex min-h-screen items-center justify-center p-8">
+<div class="flex min-h-screen items-center justify-center bg-base-200 p-8">
 	<div class="w-full max-w-2xl space-y-6">
 		<!-- Header -->
 		<div class="text-center">
-			<h1 class="text-base-content text-4xl font-bold">Kinder Audio Player</h1>
+			<h1 class="text-4xl font-bold text-base-content">Kinder Audio Player</h1>
 		</div>
 
 		<!-- Loading State -->
 		{#if isLoading}
 			<div class="flex justify-center">
-				<span class="loading loading-spinner loading-lg text-primary"></span>
+				<span class="loading loading-lg loading-spinner text-primary"></span>
 			</div>
 		{/if}
 
@@ -101,7 +101,7 @@
 
 		<!-- Player Card -->
 		{#if audioManager.currentSong}
-			<div class="card bg-base-100 border-base-300 border-2 shadow-xl">
+			<div class="card border-2 border-base-300 bg-base-100 shadow-xl">
 				<div class="card-body">
 					<!-- Status Indicator -->
 					<div class="indicator mb-4 w-full">
@@ -112,16 +112,16 @@
 						>
 							{audioManager.isPlaying ? '▶ Playing' : '⏸ Paused'}
 						</span>
-						<div class="bg-base-200 flex w-full items-center justify-center p-8">
+						<div class="flex w-full items-center justify-center bg-base-200 p-8">
 							<div class="text-8xl">🎵</div>
 						</div>
 					</div>
 
 					<!-- Song Info Stats -->
-					<div class="stats stats-vertical bg-base-200 w-full shadow">
+					<div class="stats w-full stats-vertical bg-base-200 shadow">
 						<div class="stat place-items-center">
 							<div class="stat-title">Now Playing</div>
-							<div class="stat-value text-primary text-2xl">
+							<div class="stat-value text-2xl text-primary">
 								{audioManager.currentSong.title}
 							</div>
 						</div>
@@ -136,7 +136,7 @@
 
 							<div class="stat place-items-center">
 								<div class="stat-title">Track</div>
-								<div class="stat-value text-accent text-base">
+								<div class="stat-value text-base text-accent">
 									{audioManager.playlist.currentIndex + 1} / {audioManager.playlist.songs.length}
 								</div>
 							</div>
@@ -157,7 +157,7 @@
 			</div>
 		{:else}
 			<!-- Waiting for Card -->
-			<div class="card bg-base-100 border-base-300 border-2 shadow-xl">
+			<div class="card border-2 border-base-300 bg-base-100 shadow-xl">
 				<div class="card-body items-center space-y-6 text-center">
 					<div class="text-9xl">🎵</div>
 					<h2 class="card-title text-2xl">Scan a card to start playing</h2>
