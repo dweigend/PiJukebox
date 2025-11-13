@@ -2,20 +2,20 @@
 
 **Project:** Toniebox-Alternative - Raspberry Pi Music Player für Kinder
 
-**Status:** Phase 2 - Managers ✅
+**Status:** Phase 3 - UI (Player + Admin) 🔄
 
 ---
 
 ## 📊 Phase Overview
 
-| Phase | Name                      | Status       | Progress |
-| ----- | ------------------------- | ------------ | -------- |
-| 0     | Setup & Dependencies      | ✅ COMPLETED | 7/7      |
-| 1     | Foundation                | ✅ COMPLETED | 3/3      |
-| 2     | Managers                  | ✅ COMPLETED | 3/3      |
-| 3     | UI (Player + Admin)       | ⏳ PENDING   | 0/4      |
-| 4     | Testing & Polish          | ⏳ PENDING   | 0/3      |
-| 5     | Deployment (Raspberry Pi) | ⏳ PENDING   | 0/5      |
+| Phase | Name                      | Status         | Progress |
+| ----- | ------------------------- | -------------- | -------- |
+| 0     | Setup & Dependencies      | ✅ COMPLETED   | 7/7      |
+| 1     | Foundation                | ✅ COMPLETED   | 3/3      |
+| 2     | Managers                  | ✅ COMPLETED   | 3/3      |
+| 3     | UI (Player + Admin)       | 🔄 IN PROGRESS | 2/4      |
+| 4     | Testing & Polish          | ⏳ PENDING     | 0/3      |
+| 5     | Deployment (Raspberry Pi) | ⏳ PENDING     | 0/5      |
 
 ---
 
@@ -148,24 +148,31 @@ git commit -m "feat: add audio, rfid, and keyboard managers"
 
 **Goal:** Build minimalist player UI and admin interface
 
-### 3.1 Player UI (`/`)
+### 3.1 Player UI (`/`) ✅ COMPLETED
 
 **Tasks:**
 
-- [ ] **3.1.1** Create `src/routes/+page.server.ts`:
-  - Load initial data (card mappings for debugging?)
-- [ ] **3.1.2** Create `src/routes/+page.svelte`:
+- [x] **3.1.1** Create `src/routes/+page.server.ts`:
+  - Load initial data (folders list)
+- [x] **3.1.2** Create `src/routes/+page.svelte`:
   - Integrate AudioManager, RFIDManager, KeyboardManager
   - Display: Current song, album art placeholder, play/pause state
-  - Minimalistisch, kinderfreundlich
-  - DaisyUI Components only (badge, card, progress?)
+  - DaisyUI Corporate Theme with Stats components
+  - Indicator badge for playback status
+  - kbd components for control hints
+
+**Implementation Notes:**
+
+- Music files moved to `static/music/` for direct serving
+- DaisyUI Corporate theme configured in `tailwind.config.ts` and `app.html`
+- API endpoint `/api/cards/[cardId]` for card lookup
+- Stats component displays: Now Playing, Album, Track position
+- Indicator badge shows Playing/Paused status
 
 **🤝 Human-in-the-loop:**
 
-- Pause after initial implementation
-- Browser validation via Chrome DevTools MCP
-- **User feedback:** Layout OK? Zu viele Infos? Zu wenig?
-- Iterate based on feedback
+- ✅ Browser validation via Chrome DevTools MCP passed
+- ✅ User tested: RFID scan, pause/play, next/previous all working
 
 **Definition of Done:**
 
@@ -177,7 +184,7 @@ git commit -m "feat: add audio, rfid, and keyboard managers"
 **Git Checkpoint:**
 
 ```bash
-git commit -m "feat: add player UI with RFID and keyboard control"
+git commit -m "feat: implement player UI with DaisyUI corporate theme"
 ```
 
 ---
