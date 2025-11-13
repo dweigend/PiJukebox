@@ -6,7 +6,7 @@ import { readdir, stat } from 'node:fs/promises';
 import { join } from 'node:path';
 import type { Folder, Song } from '$lib/types';
 
-const MUSIC_DIR = 'music';
+const MUSIC_DIR = 'static/music';
 
 /**
  * Check if folder exists in music directory
@@ -45,7 +45,7 @@ export async function getFolderSongs(folderName: string): Promise<Song[]> {
 
 	return mp3Files.map((filename) => ({
 		filename,
-		path: join(folderPath, filename),
+		path: `/music/${folderName}/${filename}`,
 		title: deriveTitle(filename)
 	}));
 }
@@ -64,7 +64,7 @@ export async function getFolder(folderName: string): Promise<Folder | null> {
 	return {
 		name: folderName,
 		songs,
-		path: join(MUSIC_DIR, folderName)
+		path: `/music/${folderName}`
 	};
 }
 
