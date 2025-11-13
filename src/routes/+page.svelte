@@ -8,6 +8,7 @@
 	let { data }: { data: PageData } = $props();
 
 	let errorMessage = $state<string | null>(null);
+	let unassignedCardId = $state<string | null>(null);
 	let isLoading = $state(false);
 
 	/**
@@ -15,14 +16,19 @@
 	 */
 	async function handleCardScanned(cardId: string) {
 		errorMessage = null;
+		unassignedCardId = null;
 		isLoading = true;
 
 		try {
 			const response = await fetch(`/api/cards/${cardId}`);
 
 			if (!response.ok) {
-				const message = response.status === 404 ? 'Card not assigned' : 'Error loading card';
-				errorMessage = message;
+				if (response.status === 404) {
+					// Card not assigned yet - show friendly info
+					unassignedCardId = cardId;
+				} else {
+					errorMessage = 'Error loading card';
+				}
 				return;
 			}
 
@@ -76,6 +82,32 @@
 		{#if isLoading}
 			<div class="flex justify-center">
 				<span class="loading loading-lg loading-spinner text-primary"></span>
+			</div>
+		{/if}
+
+		<!-- Unassigned Card Info -->
+		{#if unassignedCardId}
+			<div class="alert alert-info">
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					class="h-6 w-6 shrink-0 stroke-current"
+					fill="none"
+					viewBox="0 0 24 24"
+				>
+					<path
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						stroke-width="2"
+						d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+					/>
+				</svg>
+				<div class="flex flex-col">
+					<span class="font-bold">Card not assigned yet</span>
+					<span class="text-sm"
+						>Card ID: <code class="rounded bg-base-200 px-2 py-1">{unassignedCardId}</code></span
+					>
+				</div>
+				<a href="/admin" class="btn btn-sm btn-primary">Assign in Admin</a>
 			</div>
 		{/if}
 
