@@ -10,7 +10,7 @@
 	let existingMapping = $state<{ folder: string; songCount: number } | null>(null);
 	let isChecking = $state(false);
 
-	// Auto-lookup bei 10 Ziffern
+	// Auto-lookup at 10 digits
 	$effect(() => {
 		if (cardInput.length === 10 && /^\d{10}$/.test(cardInput)) {
 			checkCardMapping(cardInput);
@@ -167,7 +167,7 @@
 							></path>
 						</svg>
 						<span
-							>Card bereits zugewiesen: <strong>{formatTitle(existingMapping.folder)}</strong>
+							>Card already assigned: <strong>{formatTitle(existingMapping.folder)}</strong>
 							({existingMapping.songCount}
 							{existingMapping.songCount === 1 ? 'song' : 'songs'})</span
 						>
@@ -187,7 +187,7 @@
 								d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
 							/>
 						</svg>
-						<span>Neue Karte - bitte Folder zuweisen</span>
+						<span>New card - please assign folder</span>
 					</div>
 				{/if}
 

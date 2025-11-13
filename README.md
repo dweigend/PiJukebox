@@ -1,8 +1,8 @@
 # kinder_audio_2
 
-**Toniebox-Alternative** - Raspberry Pi Music Player für Kinder
+**Toniebox Alternative** - RFID Music Player for Children
 
-Ein RFID-gesteuerter Musikplayer für Kinder, der auf einem Raspberry Pi läuft. RFID-Karten steuern die Musikwiedergabe, ein USB-Controller (W/E/R Tasten) ermöglicht Playback-Kontrolle, und ein Web-Admin-Interface verwaltet die Karten-Zuordnungen.
+This project is an RFID-controlled music player for children, designed as a Toniebox alternative running on Raspberry Pi. Children can scan RFID cards to play music albums, while physical USB controller buttons provide playback control. A web-based admin interface allows parents to manage card-to-music mappings easily.
 
 ## Author
 
@@ -117,8 +117,6 @@ See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) (coming in Phase 5) for Raspberry P
 3. **Audio**: Connect speakers/amplifier via 3.5mm jack or USB audio
 
 ## Development Roadmap
-
-See [PLAN.md](PLAN.md) for detailed development phases.
 
 - ✅ Phase 0: Setup & Dependencies
 - ✅ Phase 1: Foundation (Types, DB, FileManager)
