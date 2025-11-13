@@ -15,7 +15,7 @@ fi
 
 # Initialize database if it doesn't exist
 if [ ! -f "data/db.json" ]; then
-  echo "{}" > data/db.json
+  echo '{"cards":{}}' > data/db.json
   echo "✅ Initialized data/db.json"
 fi
 

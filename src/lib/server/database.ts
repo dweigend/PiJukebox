@@ -59,5 +59,5 @@ export async function deleteCardMapping(cardId: string): Promise<void> {
  */
 export async function getAllMappings(): Promise<Record<string, string>> {
 	const database = await initDb();
-	return database.data.cards;
+	return database.data.cards ?? {};
 }
