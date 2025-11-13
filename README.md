@@ -4,15 +4,6 @@
 
 This project is an RFID-controlled music player for children, designed as a Toniebox alternative running on Raspberry Pi. Children can scan RFID cards to play music albums, while physical USB controller buttons provide playback control. A web-based admin interface allows parents to manage card-to-music mappings easily.
 
-## Author
-
-**David Weigend**
-
-- Email: david.weigend@gmail.com
-- X: [@weigend](https://x.com/weigend)
-- Web: [weigend.studio](https://weigend.studio)
-- GitHub: [@dweigend](https://github.com/dweigend)
-
 ## Tech Stack
 
 - **SvelteKit** - Full-Stack Framework (SSR + API Routes)
@@ -106,30 +97,12 @@ bun run build
 bun run preview
 ```
 
-## Deployment
-
-See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) (coming in Phase 5) for Raspberry Pi deployment instructions.
-
 ## Hardware Setup
 
 1. **RFID Scanner**: Connect USB RFID scanner (sends 10 digits + ENTER)
 2. **Controller**: Connect CH57x USB controller (W/E/R keys)
 3. **Audio**: Connect speakers/amplifier via 3.5mm jack or USB audio
 
-## Development Roadmap
-
-- ✅ Phase 0: Setup & Dependencies
-- ✅ Phase 1: Foundation (Types, DB, FileManager)
-- ✅ Phase 2: Managers (Audio, RFID, Keyboard)
-- ✅ Phase 3: UI (Player + Admin)
-- ✅ Phase 3.5: Refactoring & Code Quality
-- ⏳ Phase 4: Testing & Polish
-- ⏳ Phase 5: Deployment (Raspberry Pi)
-
 ## License
 
 MIT
-
-## Acknowledgments
-
-Built with [Claude Code](https://claude.com/claude-code)
