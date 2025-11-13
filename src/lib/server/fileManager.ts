@@ -2,7 +2,7 @@
  * File manager for music folder operations
  */
 
-import { readdir, stat } from 'node:fs/promises';
+import { readdir, stat, mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import type { Folder, Song } from '$lib/types';
 
@@ -79,4 +79,21 @@ function deriveTitle(filename: string): string {
 		.replace(/[_-]/g, ' ') // Replace underscores/hyphens with spaces
 		.trim()
 		.replace(/\b\w/g, (char) => char.toUpperCase()); // Capitalize words
+}
+
+/**
+ * Create new music folder
+ */
+export async function createFolder(folderName: string): Promise<void> {
+	const folderPath = join(MUSIC_DIR, folderName);
+	await mkdir(folderPath, { recursive: true });
+}
+
+/**
+ * Save MP3 file to folder
+ */
+export async function saveMP3(folderName: string, filename: string, buffer: Buffer): Promise<void> {
+	const folderPath = join(MUSIC_DIR, folderName);
+	const filePath = join(folderPath, filename);
+	await writeFile(filePath, buffer);
 }
