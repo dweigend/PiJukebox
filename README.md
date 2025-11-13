@@ -30,6 +30,8 @@ Ein RFID-gesteuerter Musikplayer für Kinder, der auf einem Raspberry Pi läuft.
 - 🔊 Auto-play next song
 - 📁 Folder-based playlists
 - 🎨 Minimalist, kid-friendly UI
+- 📤 Multiple MP3 file upload
+- ♻️ Clean, maintainable codebase
 
 ## Project Structure
 
@@ -49,8 +51,11 @@ src/
 │   ├── server/                   # Server-only
 │   │   ├── database.ts           # lowdb CRUD
 │   │   └── fileManager.ts        # File operations
+│   ├── utils/                    # Shared utilities
+│   │   └── formatters.ts         # Text formatting
+│   ├── constants.ts              # App constants
 │   └── types.ts                  # Shared types
-music/                            # MP3 folders
+static/music/                     # MP3 folders
 data/db.json                      # Card mappings
 ```
 
@@ -118,7 +123,8 @@ See [PLAN.md](PLAN.md) for detailed development phases.
 - ✅ Phase 0: Setup & Dependencies
 - ✅ Phase 1: Foundation (Types, DB, FileManager)
 - ✅ Phase 2: Managers (Audio, RFID, Keyboard)
-- ⏳ Phase 3: UI (Player + Admin)
+- ✅ Phase 3: UI (Player + Admin)
+- ✅ Phase 3.5: Refactoring & Code Quality
 - ⏳ Phase 4: Testing & Polish
 - ⏳ Phase 5: Deployment (Raspberry Pi)
 

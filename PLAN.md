@@ -2,7 +2,7 @@
 
 **Project:** Toniebox-Alternative - Raspberry Pi Music Player für Kinder
 
-**Status:** Phase 3 - UI (Player + Admin) ✅ COMPLETED
+**Status:** Phase 3 - UI (Player + Admin) ✅ COMPLETED | Refactoring & Enhancements ✅ COMPLETED
 
 ---
 
@@ -14,6 +14,7 @@
 | 1     | Foundation                | ✅ COMPLETED | 3/3      |
 | 2     | Managers                  | ✅ COMPLETED | 3/3      |
 | 3     | UI (Player + Admin)       | ✅ COMPLETED | 4/4      |
+| 3.5   | Refactoring & Polish      | ✅ COMPLETED | 5/5      |
 | 4     | Testing & Polish          | ⏳ PENDING   | 0/3      |
 | 5     | Deployment (Raspberry Pi) | ⏳ PENDING   | 0/5      |
 
@@ -248,6 +249,60 @@ git commit -m "feat: implement admin interface with DaisyUI components"
 
 ---
 
+## Phase 3.5: Refactoring & Code Quality
+
+**Goal:** Extract utilities, improve code quality, add enhancements
+
+### Tasks
+
+- [x] **3.5.1** Extract formatters to utility:
+  - Create `src/lib/utils/formatters.ts` with `formatTitle()` function
+  - Replace duplicate `deriveTitle()` implementations
+  - Apply formatter to Player UI, Admin UI, FileManager
+- [x] **3.5.2** Extract magic constants:
+  - Create `src/lib/constants.ts`
+  - Extract: CARD_ID_LENGTH, CARD_ID_PATTERN, INPUT_RESET_TIMEOUT_MS, UPLOAD_MAX_SIZE_BYTES, FOLDER_NAME_PATTERN
+  - Update: RFIDManager, Admin server actions
+- [x] **3.5.3** Improve Player UI:
+  - Simplify layout (centered, cleaner spacing)
+  - Fix play button position (badge instead of indicator-item)
+  - Format album names properly ("Ein Geschenk Des Himmels")
+- [x] **3.5.4** Add multiple file upload:
+  - Update Admin UI: `multiple` attribute on file input
+  - Update server action: `formData.getAll()` for multiple files
+  - Validate each file individually
+  - Dynamic success messages (1 file vs X files)
+- [x] **3.5.5** Fix linting errors:
+  - Remove unused `data` prop from Player
+  - Add `data-sveltekit-reload` for admin link
+  - Add keys to all `{#each}` blocks
+  - Disable `svelte/no-navigation-without-resolve` rule
+
+**Implementation Notes:**
+
+- Centralized formatters eliminate code duplication
+- Constants provide single source of truth
+- Player UI now cleaner and more readable
+- Multiple MP3 upload improves admin workflow
+- Zero TypeScript errors, only a11y warnings
+
+**Definition of Done:**
+
+- ✅ No code duplication (formatters centralized)
+- ✅ No magic values (constants extracted)
+- ✅ Player UI cleaner and simpler
+- ✅ Multiple file upload working
+- ✅ All linting errors fixed (TypeScript: 0 errors)
+
+**Git Checkpoint:**
+
+```bash
+git commit -m "refactor: ♻️ add utilities and improve code quality"
+# Completed: f00a880
+```
+
+---
+
 ## Phase 4: Testing & Polish
 
 **Goal:** Validate everything works, fix edge cases
@@ -435,15 +490,22 @@ This `PLAN.md` is a **living document**:
 
 ## 🚀 Quick Reference
 
-**Current Phase:** Phase 0 - Setup
+**Current Phase:** Phase 3 ✅ COMPLETED + Refactoring ✅ COMPLETED
 
 **Next Steps:**
 
-1. Install dependencies (`bun add lowdb howler @types/howler daisyui`)
-2. Create directory structure
-3. Initialize `data/db.json`
-4. Configure Tailwind + DaisyUI
-5. Update `.gitignore`
-6. Fix TypeScript config
+1. Begin Phase 4: Testing & Polish
+2. End-to-End testing via Chrome DevTools MCP
+3. Edge case handling
+4. Code quality review
+5. User walkthrough and feedback
+
+**Recent Additions:**
+
+- ✅ Centralized formatters (`src/lib/utils/formatters.ts`)
+- ✅ Constants extraction (`src/lib/constants.ts`)
+- ✅ Improved Player UI (cleaner layout, centered design)
+- ✅ Multiple MP3 file upload support
+- ✅ All linting errors fixed
 
 **See:** `PROJECTPLAN.md` for detailed architecture and design decisions.
