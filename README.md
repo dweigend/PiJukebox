@@ -63,8 +63,8 @@ data/db.json                      # Card mappings
 
 ```bash
 # Clone the repository
-git clone https://github.com/dweigend/kinder_audio_2.git
-cd kinder_audio_2
+git clone https://github.com/dweigend/PiJukebox.git
+cd PiJukebox
 
 # Install dependencies
 bun install
