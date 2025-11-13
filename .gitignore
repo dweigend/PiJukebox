@@ -21,6 +21,7 @@ Thumbs.db
 
 # Data
 data/db.json
+!data/.gitkeep
 
 # Vite
 vite.config.js.timestamp-*
@@ -31,7 +32,8 @@ CLAUDE.md
 .claude/
 
 # Music files (user-specific)
-static/music/
+static/music/*
+!static/music/.gitkeep
 
 # Internal documentation
 docs/

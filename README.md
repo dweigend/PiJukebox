@@ -66,9 +66,14 @@ data/db.json                      # Card mappings
 git clone https://github.com/dweigend/PiJukebox.git
 cd PiJukebox
 
-# Install dependencies
+# Install dependencies (automatically runs setup.sh)
 bun install
+
+# Manual setup (only if postinstall didn't run)
+bash setup.sh
 ```
+
+**Note:** The setup script creates required directories (`data/`, `static/music/`) and initializes the database.
 
 ### Development
 
