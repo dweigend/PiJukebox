@@ -131,39 +131,29 @@ This is the PiJukebox standard setup for the VBESTLIFE 3-Key/1-Knob controller.
 # VBESTLIFE Macro-Keyboard with Red Switch (3 Keys 1 Knob)
 #
 # Physical button layout and their keycodes:
-#   Key 1 (left): R = Next track
-#   Key 2 (middle): E = Pause/Play toggle
-#   Key 3 (right): W = Previous track
+#   Key 1 (left): "r" → Next track
+#   Key 2 (middle): "e" → Pause/Play toggle
+#   Key 3 (right): "w" → Previous track
 #
 # KeyboardManager code mapping (POINT OF TRUTH):
 #   W key press → Previous track (onPrevious)
 #   E key press → Pause/Play (onPausePlay)
 #   R key press → Next track (onNext)
 #
-# Knob: Volume control
-#   Rotate Counter-clockwise = Volume down
-#   Rotate Clockwise = Volume up
-#   Press = Mute/Unmute
+# Knob actions:
+#   Rotate Counter-clockwise → Volume down
+#   Rotate Clockwise → Volume up
+#   Press → Mute/Unmute
+#
+# NOTE: No KC_ prefix! Use lowercase keycode names from `ch57x-keyboard-tool show-keys`
 
-keys:
-  # Key 1 (left): Next track
-  - keycode: [KC_R]
-
-  # Key 2 (middle): Pause/Play toggle
-  - keycode: [KC_E]
-
-  # Key 3 (right): Previous track
-  - keycode: [KC_W]
-
-knob:
-  # Knob: Rotate Counter-Clockwise
-  - keycode: [KC_MEDIA_VOLUME_DOWN]
-
-  # Knob: Rotate Clockwise
-  - keycode: [KC_MEDIA_VOLUME_UP]
-
-  # Knob: Press
-  - keycode: [KC_MEDIA_MUTE]
+layers:
+  - buttons:
+      - ['r', 'e', 'w'] # Single row: left, middle, right
+    knobs:
+      - ccw: 'volumedown' # Counter-clockwise rotation
+        press: 'mute' # Knob press
+        cw: 'volumeup' # Clockwise rotation
 ```
 
 ### Alternative: Media Keys Configuration
@@ -180,29 +170,24 @@ If you prefer system-wide media control keys instead of letter keys:
 # This configuration uses dedicated media control keys for playback,
 # which work system-wide without application focus.
 #
-# NOTE: PiJukebox's KeyboardManager expects W/E/R keys by default.
+# IMPORTANT: PiJukebox's KeyboardManager expects W/E/R keys by default.
 # Use this configuration only if you modify KeyboardManager to listen
 # for media keys, or for system-wide media control outside PiJukebox.
+#
+# Physical button layout:
+#   Key 1 (left): "next" → Next track (media key)
+#   Key 2 (middle): "play" → Play/Pause (media key)
+#   Key 3 (right): "prev" → Previous track (media key)
+#
+# NOTE: No KC_ prefix! Use lowercase keycode names from `ch57x-keyboard-tool show-keys`
 
-keys:
-  # Key 1 (left): Next track (media key)
-  - keycode: [KC_MEDIA_NEXT_TRACK]
-
-  # Key 2 (middle): Play/Pause (media key)
-  - keycode: [KC_MEDIA_PLAY_PAUSE]
-
-  # Key 3 (right): Previous track (media key)
-  - keycode: [KC_MEDIA_PREVIOUS_TRACK]
-
-knob:
-  # Knob: Rotate Counter-Clockwise
-  - keycode: [KC_MEDIA_VOLUME_DOWN]
-
-  # Knob: Rotate Clockwise
-  - keycode: [KC_MEDIA_VOLUME_UP]
-
-  # Knob: Press
-  - keycode: [KC_MEDIA_MUTE]
+layers:
+  - buttons:
+      - ['next', 'play', 'prev'] # Single row: left, middle, right
+    knobs:
+      - ccw: 'volumedown' # Counter-clockwise rotation
+        press: 'mute' # Knob press
+        cw: 'volumeup' # Clockwise rotation
 ```
 
 **Note:** Media keys work system-wide without application focus, but PiJukebox's KeyboardManager expects W/E/R keys. Use the standard configuration (letter keys) unless you modify the KeyboardManager code.
@@ -238,7 +223,7 @@ Configuration uploaded successfully
 
 ### 3. Test
 
-Press the keys (W, E, R) and verify they emit the correct keypresses in your system.
+Press the physical buttons and verify they emit the correct keypresses (R, E, W) in your system.
 
 **Quick test on Linux:**
 
@@ -250,7 +235,11 @@ sudo apt install x11-utils
 xev | grep KeyPress
 ```
 
-Press W/E/R on the controller - you should see corresponding key events.
+Press the physical buttons on the controller:
+
+- Left button → Should show "r" KeyPress
+- Middle button → Should show "e" KeyPress
+- Right button → Should show "w" KeyPress
 
 ## Available Key Names
 
@@ -260,23 +249,25 @@ Get a complete list of supported keys:
 ch57x-keyboard-tool show-keys
 ```
 
+**IMPORTANT:** All keycode names are lowercase strings without any prefix (no `KC_` or `KEY_`).
+
 **Common keys for media control:**
 
-- `w`, `e`, `r` - Letter keys
-- `prev`, `next` - Media previous/next
-- `play` - Media play/pause
-- `mute`, `volumeup`, `volumedown` - Volume control
-- `home`, `esc`, `f5` - Navigation keys
+- `"w"`, `"e"`, `"r"` - Letter keys (lowercase)
+- `"prev"`, `"next"` - Media previous/next
+- `"play"` - Media play/pause
+- `"mute"`, `"volumeup"`, `"volumedown"` - Volume control
+- `"home"`, `"esc"`, `"f5"` - Navigation keys
 
 **Modifiers:**
 
-- `ctrl`, `alt`, `shift`, `cmd`/`win`
+- `"ctrl"`, `"alt"`, `"shift"`, `"cmd"`/`"win"`
 
 **Special actions:**
 
-- `click`, `rclick`, `mclick` - Mouse clicks
-- `wheelup`, `wheeldown` - Scroll wheel
-- `move(x,y)` - Mouse movement
+- `"click"`, `"rclick"`, `"mclick"` - Mouse clicks
+- `"wheelup"`, `"wheeldown"` - Scroll wheel
+- `"move(x,y)"` - Mouse movement
 
 ## Integration with PiJukebox
 
@@ -373,8 +364,8 @@ ch57x-keyboard-tool led 0 press 4          # Press-reactive, level 4
 
 Configuration examples are included in this directory:
 
-- `pijukebox-controller.yaml` - **Standard setup:** W/E/R letter keys + Volume knob
-- `pijukebox-advanced.yaml` - **Alternative:** Media keys instead of letter keys
+- `pijukebox-controller.yaml` - **Standard setup:** R/E/W letter keys + Volume knob (matches KeyboardManager)
+- `pijukebox-advanced.yaml` - **Alternative:** Media keys (next/play/prev) instead of letter keys
 
 ## Additional Resources
 

@@ -5,26 +5,21 @@
 # This configuration uses dedicated media control keys for playback,
 # which work system-wide without application focus.
 #
-# NOTE: PiJukebox's KeyboardManager expects W/E/R keys by default.
+# IMPORTANT: PiJukebox's KeyboardManager expects W/E/R keys by default.
 # Use this configuration only if you modify KeyboardManager to listen
 # for media keys, or for system-wide media control outside PiJukebox.
+#
+# Physical button layout:
+#   Key 1 (left): "next" → Next track (media key)
+#   Key 2 (middle): "play" → Play/Pause (media key)
+#   Key 3 (right): "prev" → Previous track (media key)
+#
+# NOTE: No KC_ prefix! Use lowercase keycode names from `ch57x-keyboard-tool show-keys`
 
-keys:
-  # Key 1 (left): Next track (media key)
-  - keycode: [KC_MEDIA_NEXT_TRACK]
-
-  # Key 2 (middle): Play/Pause (media key)
-  - keycode: [KC_MEDIA_PLAY_PAUSE]
-
-  # Key 3 (right): Previous track (media key)
-  - keycode: [KC_MEDIA_PREVIOUS_TRACK]
-
-knob:
-  # Knob: Rotate Counter-Clockwise
-  - keycode: [KC_MEDIA_VOLUME_DOWN]
-
-  # Knob: Rotate Clockwise
-  - keycode: [KC_MEDIA_VOLUME_UP]
-
-  # Knob: Press
-  - keycode: [KC_MEDIA_MUTE]
+layers:
+  - buttons:
+      - ['next', 'play', 'prev'] # Single row: left, middle, right
+    knobs:
+      - ccw: 'volumedown' # Counter-clockwise rotation
+        press: 'mute' # Knob press
+        cw: 'volumeup' # Clockwise rotation
