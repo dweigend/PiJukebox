@@ -124,8 +124,6 @@ http://192.168.1.173:3000  # Replace with your Pi's IP
 ```bash
 # Access from Mac/PC:
 http://raspberrypi.local:3000
-# or
-http://raspi-rfid.local:3000  # Use your Pi's hostname
 ```
 
 **Note:** Server must be started with `HOST=0.0.0.0` for remote access (already configured in start script).

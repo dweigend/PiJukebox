@@ -375,10 +375,6 @@ Configuration examples are included in this directory:
 
 ## Support
 
-For issues specific to PiJukebox integration:
-
-- **GitHub Issues:** [PiJukebox Issues](https://github.com/dweigend/PiJukebox/issues)
-
 For ch57x-keyboard-tool issues:
 
 - **Tool Issues:** [ch57x-keyboard-tool Issues](https://github.com/kriomant/ch57x-keyboard-tool/issues)

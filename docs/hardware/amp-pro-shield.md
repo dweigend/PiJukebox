@@ -288,6 +288,5 @@ On older Raspberry Pi OS versions, the config is located at `/boot/config.txt` i
 
 For issues, see also:
 
-- **GitHub Issues:** [PiJukebox Issues](https://github.com/dweigend/PiJukebox/issues)
 - **INNO-MAKER Support:** [GitHub Issues](https://github.com/INNO-MAKER/AMP-Pro/issues)
 - **Geekworm Forum:** [Support Portal](https://www.geekworm.com/pages/contact-us)
