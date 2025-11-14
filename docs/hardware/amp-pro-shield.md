@@ -1,72 +1,72 @@
 # Innomaker Amp Pro Setup
 
-Setup-Anleitung für den Innomaker Amp Pro (Merus MA12070P) Verstärker auf Raspberry Pi.
+Setup guide for the Innomaker Amp Pro (Merus MA12070P) amplifier on Raspberry Pi.
 
-> **Hinweis:** Für dieses Projekt nutze ich den **INNO-MAKER AMP-Pro**. Diese Anleitung beschreibt die komplette Einrichtung über SSH/CLI.
+> **Note:** This project uses the **INNO-MAKER AMP-Pro**. This guide describes the complete setup via SSH/CLI.
 
-## 📚 Offizielle Dokumentation
+## 📚 Official Documentation
 
 - **GitHub Repository:** [INNO-MAKER/AMP-Pro](https://github.com/INNO-MAKER/AMP-Pro)
-- **Wiki & Handbuch:** [Geekworm Amp Pro Wiki](https://wiki.geekworm.com/AMP_Pro)
+- **Wiki & Manual:** [Geekworm Amp Pro Wiki](https://wiki.geekworm.com/AMP_Pro)
 
-## Hardware-Anforderungen
+## Hardware Requirements
 
-### Verstärker
+### Amplifier
 
-- **Produkt:** INNO-MAKER Amp Pro
-- **Chipsatz:** Infineon Merus MA12070P (Class-D Amplifier)
-- **Leistung:** 2×80W Peak Output (2×50W RMS @ 4Ω)
-- **Kompatibilität:** Raspberry Pi 3/4/5 (40-pin GPIO Header)
-- **Kühlung:** Passiver Kühlkörper integriert
-- **Abmessungen:** HAT-Format (65mm × 56mm)
+- **Product:** INNO-MAKER Amp Pro
+- **Chipset:** Infineon Merus MA12070P (Class-D Amplifier)
+- **Power:** 2×80W Peak Output (2×50W RMS @ 4Ω)
+- **Compatibility:** Raspberry Pi 3/4/5 (40-pin GPIO Header)
+- **Cooling:** Integrated passive heatsink
+- **Dimensions:** HAT format (65mm × 56mm)
 
-### Stromversorgung
+### Power Supply
 
-- **Spannung:** 9-24V DC (±5%), empfohlen 12V oder 19V
-- **Strom:** Mindestens 3A (je nach Lautstärke bis zu 5A)
-- **Anschluss:** DC Jack (5.5mm × 2.1mm) oder Schraubklemme (2-polig)
-- **WICHTIG:** Qualitäts-Netzteil verwenden (Spannungsspitzen können 30V überschreiten)
+- **Voltage:** 9-24V DC (±5%), recommended 12V or 19V
+- **Current:** Minimum 3A (up to 5A depending on volume)
+- **Connection:** DC Jack (5.5mm × 2.1mm) or screw terminal (2-pin)
+- **IMPORTANT:** Use quality power supply (voltage spikes can exceed 30V)
 
-### Lautsprecher
+### Speakers
 
-- **Impedanz:** 4Ω oder 8Ω (empfohlen 4Ω für maximale Leistung)
-- **Leistung:** Mindestens 50W RMS pro Kanal
-- **Anschluss:** 6-polige Schraubklemme (siehe Pin-Belegung unten)
+- **Impedance:** 4Ω or 8Ω (4Ω recommended for maximum power)
+- **Power:** Minimum 50W RMS per channel
+- **Connection:** 6-pin screw terminal (see pinout below)
 
-## ⚠️ Sicherheitshinweise
+## ⚠️ Safety Warnings
 
-**CRITICAL - Vor der Installation lesen!**
+**CRITICAL - Read before installation!**
 
-1. **NIEMALS Hot-Plug!**
-   - ✅ Richtig: Netzteil mit Amp Pro verbinden → **dann** Netzteil einschalten
-   - ❌ Falsch: Amp Pro bei laufendem Netzteil anschließen
-   - **Risiko:** Board wird zerstört!
+1. **NEVER Hot-Plug!**
+   - ✅ Correct: Connect power supply to Amp Pro → **then** turn on power supply
+   - ❌ Wrong: Connect Amp Pro while power supply is running
+   - **Risk:** Board will be destroyed!
 
-2. **Stromversorgung:**
-   - 9-24V DC ±5%, mindestens 3A
-   - Qualitäts-Netzteil verwenden (Spannungsspitzen können 30V überschreiten)
+2. **Power Supply:**
+   - 9-24V DC ±5%, minimum 3A
+   - Use quality power supply (voltage spikes can exceed 30V)
 
-3. **Lautsprecher:**
-   - Polarität beachten (nicht verpolen)
-   - Korrekte Pin-Belegung (siehe unten)
+3. **Speakers:**
+   - Observe polarity (do not reverse)
+   - Correct pin assignment (see below)
 
-## Hardware-Anschluss
+## Hardware Connection
 
-### Stromversorgung (Wahl zwischen):
+### Power Supply (Choose one):
 
-- **DC Jack:** 9-24V mit 5.5mm Hohlstecker
-- **Green Connector PIN-1/2:** Alternative +/- Versorgung
+- **DC Jack:** 9-24V with 5.5mm barrel connector
+- **Green Connector PIN-1/2:** Alternative +/- supply
 
-### Lautsprecher-Pins (Amp Pro):
+### Speaker Pins (Amp Pro):
 
 - **PIN-3:** Right Speaker Negative (-)
 - **PIN-4:** Right Speaker Positive (+)
 - **PIN-5:** Left Speaker Positive (+)
 - **PIN-6:** Left Speaker Negative (-)
 
-## Software-Installation
+## Software Installation
 
-### Variante 1: Automatische Installation (empfohlen)
+### Option 1: Automatic Installation (Recommended)
 
 ```bash
 cd docs/hardware/amp-pro
@@ -74,44 +74,44 @@ chmod +x install.sh
 ./install.sh
 ```
 
-> **Hinweis:** Die Konfigurationsdateien (`asound.conf`, `install.sh`) befinden sich im Unterordner `docs/hardware/amp-pro/`.
+> **Note:** Configuration files (`asound.conf`, `install.sh`) are located in the `docs/hardware/amp-pro/` subdirectory.
 
-Das Script:
+The script will:
 
-1. Fügt `dtoverlay=merus-amp` zu `/boot/firmware/config.txt` hinzu
-2. Installiert ALSA-Konfiguration nach `/etc/asound.conf`
-3. Erstellt Backup der vorhandenen Konfiguration
-4. Bietet Reboot an
+1. Add `dtoverlay=merus-amp` to `/boot/firmware/config.txt`
+2. Install ALSA configuration to `/etc/asound.conf`
+3. Create backup of existing configuration
+4. Offer to reboot
 
-### Variante 2: Manuelle Installation
+### Option 2: Manual Installation
 
-#### Schritt 1: Device Tree Overlay aktivieren
+#### Step 1: Enable Device Tree Overlay
 
 ```bash
 sudo nano /boot/firmware/config.txt
 ```
 
-Am Ende hinzufügen:
+Add at the end:
 
 ```
 dtoverlay=merus-amp
 ```
 
-Speichern (Strg+O, Enter, Strg+X)
+Save (Ctrl+O, Enter, Ctrl+X)
 
-#### Schritt 2: ALSA-Konfiguration
+#### Step 2: ALSA Configuration
 
 ```bash
 sudo cp docs/hardware/amp-pro/asound.conf /etc/asound.conf
 ```
 
-Oder manuell erstellen:
+Or create manually:
 
 ```bash
 sudo nano /etc/asound.conf
 ```
 
-Inhalt (siehe `docs/hardware/amp-pro/asound.conf`):
+Content (see `docs/hardware/amp-pro/asound.conf`):
 
 ```conf
 # Softvol PCM with 50% volume limit
@@ -137,148 +137,148 @@ ctl.!default {
 }
 ```
 
-#### Schritt 3: Reboot
+#### Step 3: Reboot
 
 ```bash
 sudo reboot
 ```
 
-## Verifizierung
+## Verification
 
-### Nach dem Reboot - Soundkarte prüfen:
+### After Reboot - Check Sound Card:
 
 ```bash
 aplay -l
 ```
 
-**Erwartete Ausgabe:**
+**Expected output:**
 
 ```
 card 3: sndrpimerusamp [snd_rpi_merus_amp], device 0: Merus Audio Amp ma120x0p-amp-0
 ```
 
-### Test-Audio abspielen:
+### Test Audio Playback:
 
 ```bash
-# WAV-Test (2 Kanäle)
+# WAV test (2 channels)
 speaker-test -c2 -t wav
 
-# Mit MP3 (mpg123 installieren falls nötig)
+# With MP3 (install mpg123 if needed)
 mpg123 /path/to/test.mp3
 ```
 
-### Lautstärke anpassen:
+### Adjust Volume:
 
 ```bash
 alsamixer
-# F6 drücken → "snd_rpi_merus_amp" auswählen
-# Pfeiltasten: Lautstärke anpassen
+# Press F6 → Select "snd_rpi_merus_amp"
+# Arrow keys: Adjust volume
 # M: Mute/Unmute
 ```
 
-Oder per CLI:
+Or via CLI:
 
 ```bash
-# Lautstärke anzeigen
+# Show volume
 amixer -c 3 scontrols
 
-# Lautstärke setzen (0-100%)
+# Set volume (0-100%)
 amixer -c 3 set Master 80% unmute
 ```
 
-## Lautstärkebegrenzung
+## Volume Limiting
 
-Die mitgelieferte `asound.conf` begrenzt die maximale Lautstärke auf **50% der Hardware-Kapazität** (`max_dB -6.0`).
+The included `asound.conf` limits maximum volume to **50% of hardware capacity** (`max_dB -6.0`).
 
-**Anpassung der Maximallautstärke:**
+**Adjusting Maximum Volume:**
 
-In `/etc/asound.conf` den `max_dB` Wert ändern:
+Edit `max_dB` value in `/etc/asound.conf`:
 
 ```conf
-max_dB -6.0     # ~50% (Standard)
-max_dB -10.0    # ~32% (leiser)
-max_dB -12.0    # ~25% (sehr sicher für Kinder)
-max_dB -3.0     # ~70% (lauter)
-max_dB 0.0      # 100% (keine Begrenzung)
+max_dB -6.0     # ~50% (default)
+max_dB -10.0    # ~32% (quieter)
+max_dB -12.0    # ~25% (very safe for children)
+max_dB -3.0     # ~70% (louder)
+max_dB 0.0      # 100% (no limit)
 ```
 
-Nach Änderung:
+After modification:
 
 ```bash
 sudo alsactl restore
-# oder
+# or
 sudo reboot
 ```
 
-**Vorteil:** Die Web-Anwendung (howler.js) kann Lautstärke von 0-100% regeln, wobei 100% im Code = 50% der Hardware-Lautstärke entspricht.
+**Advantage:** The web application (howler.js) can control volume from 0-100%, where 100% in code = 50% of hardware volume.
 
-## Integration mit kinder_audio_2
+## Integration with kinder_audio_2
 
-Das Projekt nutzt howler.js für Audio-Wiedergabe. Howler.js verwendet automatisch die System-Standard-Soundkarte (definiert in `/etc/asound.conf`).
+This project uses howler.js for audio playback. Howler.js automatically uses the system default sound card (defined in `/etc/asound.conf`).
 
-**Test im Projekt:**
+**Test in project:**
 
 ```bash
 cd /path/to/kinder_audio_2
 bun run dev
 ```
 
-Browser öffnen → Audio sollte über die angeschlossenen Lautsprecher kommen.
+Open browser → Audio should play through connected speakers.
 
 ## Troubleshooting
 
-### Problem: Kein Sound / Sound zu leise
+### Problem: No Sound / Sound Too Quiet
 
 ```bash
-# Prüfen ob gemuted
+# Check if muted
 amixer -c 3 scontrols
 amixer -c 3 set Master 80% unmute
 
-# ALSA State neu laden
+# Reload ALSA state
 sudo alsactl restore
 ```
 
-### Problem: Amp Pro wird nicht erkannt
+### Problem: Amp Pro Not Detected
 
 ```bash
-# Device Tree Overlay prüfen
+# Check device tree overlay
 vcgencmd get_config dtoverlay
-# Sollte enthalten: "dtoverlay=merus-amp"
+# Should contain: "dtoverlay=merus-amp"
 
-# Kernel-Module prüfen
+# Check kernel modules
 lsmod | grep snd
 ```
 
-### Problem: Falsche Card-Nummer
+### Problem: Wrong Card Number
 
-Wenn `aplay -l` eine andere Card-Nummer als `3` zeigt, passe `/etc/asound.conf` an:
+If `aplay -l` shows a different card number than `3`, adjust `/etc/asound.conf`:
 
 ```conf
-slave.pcm "hw:X,0"    # X = deine Card-Nummer
+slave.pcm "hw:X,0"    # X = your card number
 control {
     name "Master"
     card X
 }
 ```
 
-### Problem: Config-Datei nicht gefunden
+### Problem: Config File Not Found
 
-Bei älteren Raspberry Pi OS Versionen liegt die Config unter `/boot/config.txt` statt `/boot/firmware/config.txt`.
+On older Raspberry Pi OS versions, the config is located at `/boot/config.txt` instead of `/boot/firmware/config.txt`.
 
-## Kompatibilität
+## Compatibility
 
-**Getestet mit:**
+**Tested with:**
 
 - Raspberry Pi 4 Model B
 - Raspberry Pi OS Lite (Debian 12 Bookworm)
 
-**Kompatibel mit:**
+**Compatible with:**
 
 - Raspberry Pi 3/4/5
 - Raspberry Pi OS (Raspbian)
 - Volumio, MoOde Audio, LibreELEC, OSMC
 
-## Weitere Ressourcen
+## Additional Resources
 
 - [GitHub Repository](https://github.com/INNO-MAKER/AMP-Pro)
 - [Geekworm Wiki](https://wiki.geekworm.com/AMP_Pro)
@@ -286,7 +286,7 @@ Bei älteren Raspberry Pi OS Versionen liegt die Config unter `/boot/config.txt`
 
 ## Support
 
-Bei Problemen siehe auch:
+For issues, see also:
 
 - **GitHub Issues:** [kinder_audio_2 Issues](https://github.com/dweigend/kinder_audio_2/issues)
 - **INNO-MAKER Support:** [GitHub Issues](https://github.com/INNO-MAKER/AMP-Pro/issues)
