@@ -2,7 +2,12 @@
 
 Setup guide for configuring CH57x-based USB macro keyboards for PiJukebox playback control.
 
-> **Note:** This project uses a CH57x USB controller configured with **W/E/R keys** for Previous/Pause/Next playback control.
+> **Note:** This project uses a **CH57x USB controller (3×1 with 1 rotary knob)** configured with:
+>
+> - **W/E/R keys** for Previous/Pause/Next playback control
+> - **Rotary knob** for Volume control (rotate) + Mute (press)
+>
+> Reference image: [3×1 Keyboard](https://github.com/kriomant/ch57x-keyboard-tool/blob/master/doc/keyboard-3-1.jpg)
 
 ## 📚 Official Documentation
 
@@ -39,8 +44,11 @@ USB keyboards with vendor/product IDs:
 - 3×1 with 1 knob
 - 4×1 without knobs
 
-**For PiJukebox:**
-Any CH57x controller with at least 3 buttons (W, E, R mapping)
+**For PiJukebox (Standard Setup):**
+
+- **Model:** CH57x USB controller (3×1 with 1 knob)
+- **Configuration:** 3 buttons (W/E/R) + 1 rotary encoder (Volume/Mute)
+- **Reference:** [Keyboard image](https://github.com/kriomant/ch57x-keyboard-tool/blob/master/doc/keyboard-3-1.jpg)
 
 ### Identify Your Device
 
