@@ -1,10 +1,10 @@
 # Development Guidelines for AI Assistants
 
-This document provides comprehensive guidelines for AI coding assistants working on **kinder_audio_2**.
+This document provides comprehensive guidelines for AI coding assistants working on **PiJukebox**.
 
 ## Project Overview
 
-**kinder_audio_2** is a Toniebox-alternative: A Raspberry Pi-based music player for children controlled by RFID cards and a USB controller.
+**PiJukebox** is a Toniebox-alternative: A Raspberry Pi-based music player for children controlled by RFID cards and a USB controller.
 
 **Core Functionality:**
 

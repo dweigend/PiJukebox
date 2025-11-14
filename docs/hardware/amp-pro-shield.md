@@ -212,14 +212,14 @@ sudo reboot
 
 **Advantage:** The web application (howler.js) can control volume from 0-100%, where 100% in code = 50% of hardware volume.
 
-## Integration with kinder_audio_2
+## Integration with PiJukebox
 
 This project uses howler.js for audio playback. Howler.js automatically uses the system default sound card (defined in `/etc/asound.conf`).
 
 **Test in project:**
 
 ```bash
-cd /path/to/kinder_audio_2
+cd /path/to/PiJukebox
 bun run dev
 ```
 
@@ -288,6 +288,6 @@ On older Raspberry Pi OS versions, the config is located at `/boot/config.txt` i
 
 For issues, see also:
 
-- **GitHub Issues:** [kinder_audio_2 Issues](https://github.com/dweigend/kinder_audio_2/issues)
+- **GitHub Issues:** [PiJukebox Issues](https://github.com/dweigend/PiJukebox/issues)
 - **INNO-MAKER Support:** [GitHub Issues](https://github.com/INNO-MAKER/AMP-Pro/issues)
 - **Geekworm Forum:** [Support Portal](https://www.geekworm.com/pages/contact-us)

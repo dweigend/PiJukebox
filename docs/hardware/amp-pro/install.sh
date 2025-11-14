@@ -1,6 +1,6 @@
 #!/bin/bash
 # Innomaker Amp Pro Installation Script for Raspberry Pi
-# Repository: https://github.com/dweigend/kinder_audio_2
+# Repository: https://github.com/dweigend/PiJukebox
 
 set -e
 

@@ -1,5 +1,5 @@
 {
-	"name": "kinder-audio-2",
+	"name": "pijukebox",
 	"private": true,
 	"version": "0.0.1",
 	"type": "module",
@@ -10,7 +10,7 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/dweigend/kinder_audio_2"
+		"url": "https://github.com/dweigend/PiJukebox"
 	},
 	"scripts": {
 		"dev": "vite dev",

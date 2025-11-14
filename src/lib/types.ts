@@ -1,5 +1,5 @@
 /**
- * Core type definitions for kinder_audio
+ * Core type definitions for PiJukebox
  */
 
 /**

@@ -8,7 +8,7 @@ These documents provide context, coding standards, and best practices to ensure 
 
 ## Files
 
-- **[AGENDA.md](./AGENDA.md)** - Primary development guidelines, coding standards, and workflows
+- **[AGEND.md](./AGEND.md)** - Primary development guidelines, coding standards, and workflows
 - **README.md** (this file) - Overview of LLM documentation
 
 ## For Human Developers
@@ -23,7 +23,7 @@ Feel free to reference these when contributing to the project.
 
 ## For AI Assistants
 
-Please read **[AGENDA.md](./AGENDA.md)** before making any code changes. It contains:
+Please read **[AGEND.md](./AGEND.md)** before making any code changes. It contains:
 
 - Project architecture overview
 - Tech stack details
@@ -37,8 +37,8 @@ Please read **[AGENDA.md](./AGENDA.md)** before making any code changes. It cont
 When an AI assistant starts working on this project, it should:
 
 1. Read this README for context
-2. Study AGENDA.md for development guidelines
-3. Refer back to AGENDA.md when making architectural decisions
+2. Study AGEND.md for development guidelines
+3. Refer back to AGEND.md when making architectural decisions
 4. Follow the documented patterns and standards
 
 ## Contributing
@@ -47,7 +47,7 @@ If you're a human developer improving these guidelines:
 
 - Keep language clear and directive for LLMs
 - Use examples liberally
-- Update AGENDA.md when architecture changes
+- Update AGEND.md when architecture changes
 - Keep formatting consistent (Markdown with code blocks)
 
 ---
