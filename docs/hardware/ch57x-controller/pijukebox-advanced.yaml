@@ -1,0 +1,31 @@
+# PiJukebox Advanced Controller Configuration
+# Full 3×3 controller with volume and navigation controls
+#
+# Row 1: Volume controls
+# Row 2: Playback controls (W/E/R)
+# Row 3: Navigation/utility keys
+
+orientation: normal
+
+# Device specifications
+rows: 3
+columns: 3
+knobs: 0
+
+# Layer 1: Full control layout
+layers:
+  - buttons:
+      # Row 1: Volume controls
+      - - 'volumedown' # Decrease volume
+        - 'mute' # Mute/Unmute
+        - 'volumeup' # Increase volume
+
+      # Row 2: Playback controls
+      - - 'w' # Previous track
+        - 'e' # Pause/Play toggle
+        - 'r' # Next track
+
+      # Row 3: Navigation/utility
+      - - 'home' # Return to home screen
+        - 'f5' # Refresh page
+        - 'esc' # Exit fullscreen

@@ -1,0 +1,22 @@
+# PiJukebox Playback Controller Configuration
+# Basic 3-button setup for W/E/R playback control
+#
+# W = Previous track
+# E = Pause/Play toggle
+# R = Next track
+
+orientation: normal
+
+# Device specifications
+# Adjust based on your controller layout
+rows: 1
+columns: 3
+knobs: 0
+
+# Layer 1: Main playback controls
+layers:
+  - buttons:
+      # Row 1: W, E, R keys for playback
+      - - 'w' # Previous track
+        - 'e' # Pause/Play toggle
+        - 'r' # Next track
