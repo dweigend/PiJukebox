@@ -13,7 +13,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ---
 
-## Project: kinder_audio_2
+## Project: PiJukebox
 
 **Toniebox-Alternative** - Raspberry Pi Music Player für Kinder
 

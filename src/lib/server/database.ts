@@ -31,7 +31,7 @@ async function initDb() {
  */
 export async function getCardMapping(cardId: string): Promise<string | null> {
 	const database = await initDb();
-	return database.data.cards[cardId] ?? null;
+	return database.data.cards?.[cardId] ?? null;
 }
 
 /**
@@ -40,6 +40,7 @@ export async function getCardMapping(cardId: string): Promise<string | null> {
 export async function setCardMapping(cardId: string, folderName: string): Promise<void> {
 	const database = await initDb();
 	await database.update((data) => {
+		if (!data.cards) data.cards = {};
 		data.cards[cardId] = folderName;
 	});
 }
@@ -50,7 +51,9 @@ export async function setCardMapping(cardId: string, folderName: string): Promis
 export async function deleteCardMapping(cardId: string): Promise<void> {
 	const database = await initDb();
 	await database.update((data) => {
-		delete data.cards[cardId];
+		if (data.cards) {
+			delete data.cards[cardId];
+		}
 	});
 }
 
