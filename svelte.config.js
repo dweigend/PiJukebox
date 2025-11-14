@@ -1,4 +1,4 @@
-import adapter from 'svelte-adapter-bun';
+import adapter from '@sveltejs/adapter-node';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 
 /** @type {import('@sveltejs/kit').Config} */
@@ -8,11 +8,10 @@ const config = {
 	preprocess: vitePreprocess(),
 
 	kit: {
-		// Use adapter-bun for production deployment with Bun runtime
+		// Use adapter-node for stable production deployment on Raspberry Pi
 		adapter: adapter({
 			out: 'build',
-			precompress: true,
-			envPrefix: 'PUBLIC_'
+			precompress: true
 		})
 	}
 };
