@@ -51,9 +51,19 @@ export interface Playlist {
 }
 
 /**
+ * Player settings
+ */
+export interface Settings {
+	/** Maximum volume (1-100%) */
+	maxVolume: number;
+}
+
+/**
  * Database schema for lowdb
  */
 export interface DatabaseSchema {
 	/** Card ID to folder name mappings */
 	cards: Record<string, string>;
+	/** Player settings */
+	settings: Settings;
 }

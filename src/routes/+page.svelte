@@ -55,12 +55,27 @@
 	/**
 	 * Initialize managers on mount
 	 */
-	onMount(() => {
+	onMount(async () => {
+		// Load settings and configure audio manager
+		try {
+			const response = await fetch('/api/settings');
+			if (response.ok) {
+				const settings = await response.json();
+				audioManager.setMaxVolume(settings.maxVolume);
+			}
+		} catch (error) {
+			console.error('Failed to load settings:', error);
+		}
+
+		// Initialize managers
 		rfidManager.init(handleCardScanned);
 		keyboardManager.init({
 			onPrevious: () => audioManager.previous(),
 			onPausePlay: handlePausePlay,
-			onNext: () => audioManager.next()
+			onNext: () => audioManager.next(),
+			onVolumeUp: () => audioManager.volumeUp(),
+			onVolumeDown: () => audioManager.volumeDown(),
+			onMute: () => audioManager.toggleMute()
 		});
 
 		return () => {
@@ -164,15 +179,41 @@
 						{/if}
 					</div>
 
+					<!-- Volume Display -->
+					<div class="flex w-full max-w-xs items-center gap-3">
+						<span class="text-sm font-medium opacity-60">Volume:</span>
+						<progress
+							class="progress progress-primary"
+							value={Math.round(audioManager.currentVolume * 100)}
+							max={Math.round(audioManager.maxVolume * 100)}
+						></progress>
+						<span class="min-w-[3rem] text-right font-mono text-sm font-bold">
+							{Math.round(audioManager.currentVolume * 100)}%
+						</span>
+						{#if audioManager.isMuted}
+							<span class="badge badge-xs badge-error">MUTED</span>
+						{/if}
+					</div>
+
 					<!-- Controls Info -->
 					<div class="divider my-2"></div>
-					<div class="text-sm opacity-60">
-						<kbd class="kbd kbd-sm">W</kbd>
-						Previous |
-						<kbd class="kbd kbd-sm">E</kbd>
-						Pause/Play |
-						<kbd class="kbd kbd-sm">R</kbd>
-						Next
+					<div class="space-y-1 text-sm opacity-60">
+						<div>
+							<kbd class="kbd kbd-sm">W</kbd>
+							Previous |
+							<kbd class="kbd kbd-sm">E</kbd>
+							Pause/Play |
+							<kbd class="kbd kbd-sm">R</kbd>
+							Next
+						</div>
+						<div>
+							<kbd class="kbd kbd-sm">Vol+</kbd>
+							Louder |
+							<kbd class="kbd kbd-sm">Vol-</kbd>
+							Quieter |
+							<kbd class="kbd kbd-sm">Mute</kbd>
+							Silence
+						</div>
 					</div>
 				</div>
 			</div>
@@ -182,13 +223,23 @@
 				<div class="card-body items-center space-y-6 text-center">
 					<MusicalNoteIcon class="h-36 w-36 text-primary" />
 					<h2 class="card-title text-2xl">Scan a card to start playing</h2>
-					<div class="text-sm opacity-60">
-						<kbd class="kbd kbd-sm">W</kbd>
-						Previous |
-						<kbd class="kbd kbd-sm">E</kbd>
-						Pause/Play |
-						<kbd class="kbd kbd-sm">R</kbd>
-						Next
+					<div class="space-y-1 text-sm opacity-60">
+						<div>
+							<kbd class="kbd kbd-sm">W</kbd>
+							Previous |
+							<kbd class="kbd kbd-sm">E</kbd>
+							Pause/Play |
+							<kbd class="kbd kbd-sm">R</kbd>
+							Next
+						</div>
+						<div>
+							<kbd class="kbd kbd-sm">Vol+</kbd>
+							Louder |
+							<kbd class="kbd kbd-sm">Vol-</kbd>
+							Quieter |
+							<kbd class="kbd kbd-sm">Mute</kbd>
+							Silence
+						</div>
 					</div>
 				</div>
 			</div>

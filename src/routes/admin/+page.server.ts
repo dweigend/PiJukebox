@@ -8,10 +8,17 @@ import type { Actions, PageServerLoad } from './$types';
 import {
 	CARD_ID_LENGTH,
 	CARD_ID_PATTERN,
-	FOLDER_NAME_PATTERN,
-	UPLOAD_MAX_SIZE_BYTES
+	UPLOAD_MAX_SIZE_BYTES,
+	MIN_VOLUME,
+	MAX_VOLUME
 } from '$lib/constants';
-import { getAllMappings, setCardMapping, deleteCardMapping } from '$lib/server/database';
+import {
+	getAllMappings,
+	setCardMapping,
+	deleteCardMapping,
+	getSettings,
+	updateSettings
+} from '$lib/server/database';
 import {
 	getAllFolders,
 	getFolderSongs,
@@ -22,11 +29,12 @@ import {
 import { sanitizeFolderName } from '$lib/utils/formatters';
 
 /**
- * Load all card mappings and available folders
+ * Load all card mappings, available folders, and settings
  */
 export const load: PageServerLoad = async () => {
 	const mappings = await getAllMappings();
 	const folders = await getAllFolders();
+	const settings = await getSettings();
 
 	// Build mappings with song counts
 	const mappingsWithCounts = await Promise.all(
@@ -42,7 +50,8 @@ export const load: PageServerLoad = async () => {
 
 	return {
 		mappings: mappingsWithCounts,
-		folders
+		folders,
+		settings
 	};
 };
 
@@ -183,6 +192,35 @@ export const actions: Actions = {
 				uploadedFiles.length === 1
 					? `File "${uploadedFiles[0]}" uploaded to ${folderName}`
 					: `${uploadedFiles.length} files uploaded to ${folderName}`
+		};
+	},
+
+	/**
+	 * Update player settings
+	 */
+	updateSettings: async ({ request }) => {
+		const formData = await request.formData();
+		const maxVolumeStr = formData.get('maxVolume')?.toString();
+
+		// Validation
+		if (!maxVolumeStr) {
+			return fail(400, { error: 'Maximum volume is required' });
+		}
+
+		const maxVolume = parseInt(maxVolumeStr, 10);
+
+		if (isNaN(maxVolume) || maxVolume < MIN_VOLUME || maxVolume > MAX_VOLUME) {
+			return fail(400, {
+				error: `Maximum volume must be between ${MIN_VOLUME} and ${MAX_VOLUME}`
+			});
+		}
+
+		// Save settings
+		await updateSettings({ maxVolume });
+
+		return {
+			success: true,
+			message: `Maximum volume set to ${maxVolume}%`
 		};
 	}
 };

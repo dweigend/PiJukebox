@@ -1,6 +1,7 @@
 /**
- * KeyboardManager - Handles W/E/R keyboard controls
+ * KeyboardManager - Handles keyboard and media key controls
  * W = Previous, E = Pause/Play, R = Next
+ * Volume Knob = VolumeUp/Down/Mute (Media Keys)
  */
 
 class KeyboardManager {
@@ -13,14 +14,27 @@ class KeyboardManager {
 	#onPrevious: (() => void) | null = null;
 	#onPausePlay: (() => void) | null = null;
 	#onNext: (() => void) | null = null;
+	#onVolumeUp: (() => void) | null = null;
+	#onVolumeDown: (() => void) | null = null;
+	#onMute: (() => void) | null = null;
 
 	/**
 	 * Initialize keyboard listener
 	 */
-	init(callbacks: { onPrevious: () => void; onPausePlay: () => void; onNext: () => void }) {
+	init(callbacks: {
+		onPrevious: () => void;
+		onPausePlay: () => void;
+		onNext: () => void;
+		onVolumeUp: () => void;
+		onVolumeDown: () => void;
+		onMute: () => void;
+	}) {
 		this.#onPrevious = callbacks.onPrevious;
 		this.#onPausePlay = callbacks.onPausePlay;
 		this.#onNext = callbacks.onNext;
+		this.#onVolumeUp = callbacks.onVolumeUp;
+		this.#onVolumeDown = callbacks.onVolumeDown;
+		this.#onMute = callbacks.onMute;
 
 		if (typeof window !== 'undefined') {
 			window.addEventListener('keydown', this.#handleKeyDown);
@@ -59,6 +73,15 @@ class KeyboardManager {
 			case 'r':
 				this.isRPressed = true;
 				this.#onNext?.();
+				break;
+			case 'audiovolumeup':
+				this.#onVolumeUp?.();
+				break;
+			case 'audiovolumedown':
+				this.#onVolumeDown?.();
+				break;
+			case 'audiovolumemute':
+				this.#onMute?.();
 				break;
 		}
 	};

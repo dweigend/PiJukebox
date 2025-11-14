@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
 	import { formatTitle } from '$lib/utils/formatters';
+	import { MIN_VOLUME, MAX_VOLUME } from '$lib/constants';
 	import type { PageData, ActionData } from './$types';
 
 	let { data, form }: { data: PageData; form: ActionData } = $props();
@@ -287,6 +288,41 @@
 
 				<div class="card-actions justify-end">
 					<button type="submit" class="btn btn-sm btn-accent">Upload MP3s</button>
+				</div>
+			</form>
+		</div>
+	</div>
+
+	<!-- Section 5: Player Settings -->
+	<div class="card border border-base-content/5 bg-base-100">
+		<div class="card-body p-4">
+			<h2 class="card-title text-lg">Player Settings</h2>
+
+			<form method="POST" action="?/updateSettings" use:enhance class="space-y-3">
+				<fieldset class="fieldset">
+					<legend class="fieldset-legend text-sm">Maximum Volume</legend>
+					<div class="flex items-center gap-4">
+						<input
+							type="range"
+							name="maxVolume"
+							min={MIN_VOLUME}
+							max={MAX_VOLUME}
+							value={data.settings.maxVolume}
+							class="range range-primary"
+						/>
+						<output class="min-w-[3rem] text-right font-mono text-lg font-bold">
+							{data.settings.maxVolume}%
+						</output>
+					</div>
+					<label class="label">
+						<span class="label-text-alt">
+							Limits the maximum volume to protect children's hearing (recommended: 70-80%)
+						</span>
+					</label>
+				</fieldset>
+
+				<div class="card-actions justify-end">
+					<button type="submit" class="btn btn-sm btn-primary">Save Settings</button>
 				</div>
 			</form>
 		</div>
