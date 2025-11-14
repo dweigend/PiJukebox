@@ -4,7 +4,7 @@
 
 import { readdir, stat, mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
-import { formatTitle } from '$lib/utils/formatters';
+import { formatTitle, sanitizeFilename } from '$lib/utils/formatters';
 import type { Folder, Song } from '$lib/types';
 
 const MUSIC_DIR = 'static/music';
@@ -78,10 +78,17 @@ export async function createFolder(folderName: string): Promise<void> {
 }
 
 /**
- * Save MP3 file to folder
+ * Save MP3 file to folder with sanitized filename
+ * @returns The sanitized filename that was actually saved
  */
-export async function saveMP3(folderName: string, filename: string, buffer: Buffer): Promise<void> {
+export async function saveMP3(
+	folderName: string,
+	filename: string,
+	buffer: Buffer
+): Promise<string> {
+	const sanitizedFilename = sanitizeFilename(filename);
 	const folderPath = join(MUSIC_DIR, folderName);
-	const filePath = join(folderPath, filename);
+	const filePath = join(folderPath, sanitizedFilename);
 	await writeFile(filePath, buffer);
+	return sanitizedFilename;
 }

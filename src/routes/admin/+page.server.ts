@@ -169,10 +169,10 @@ export const actions: Actions = {
 				return fail(400, { error: `File "${file.name}" exceeds 10MB limit` });
 			}
 
-			// Save MP3
+			// Save MP3 (filename will be sanitized automatically)
 			const buffer = Buffer.from(await file.arrayBuffer());
-			await saveMP3(folderName, file.name, buffer);
-			uploadedFiles.push(file.name);
+			const savedFilename = await saveMP3(folderName, file.name, buffer);
+			uploadedFiles.push(savedFilename);
 		}
 
 		return {
