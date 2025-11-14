@@ -4,6 +4,7 @@
 	import { rfidManager } from '$lib/managers/RFIDManager.svelte';
 	import { keyboardManager } from '$lib/managers/KeyboardManager.svelte';
 	import { formatTitle } from '$lib/utils/formatters';
+	import { MusicalNoteIcon } from 'heroicons-svelte/24/solid';
 
 	let errorMessage = $state<string | null>(null);
 	let unassignedCardId = $state<string | null>(null);
@@ -134,7 +135,7 @@
 			<div class="card border-2 border-base-300 bg-base-100 shadow-xl">
 				<div class="card-body items-center space-y-6 text-center">
 					<!-- Music Icon -->
-					<div class="text-9xl">🎵</div>
+					<MusicalNoteIcon class="h-36 w-36 text-primary" />
 
 					<!-- Status Badge -->
 					<div
@@ -179,7 +180,7 @@
 			<!-- Waiting for Card -->
 			<div class="card border-2 border-base-300 bg-base-100 shadow-xl">
 				<div class="card-body items-center space-y-6 text-center">
-					<div class="text-9xl">🎵</div>
+					<MusicalNoteIcon class="h-36 w-36 text-primary" />
 					<h2 class="card-title text-2xl">Scan a card to start playing</h2>
 					<div class="text-sm opacity-60">
 						<kbd class="kbd kbd-sm">W</kbd>

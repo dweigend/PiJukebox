@@ -16,6 +16,7 @@
 		"dev": "vite dev",
 		"build": "vite build",
 		"preview": "vite preview",
+		"start": "bun run ./build/index.js",
 		"prepare": "svelte-kit sync || echo ''",
 		"postinstall": "bash setup.sh",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
