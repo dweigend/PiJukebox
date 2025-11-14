@@ -11,6 +11,10 @@
 	let existingMapping = $state<{ folder: string; songCount: number } | null>(null);
 	let isChecking = $state(false);
 
+	// Volume Slider State (reactive for live preview)
+	// Note: Must use $state (not $derived) because we need two-way binding with bind:value
+	let maxVolumeSlider = $state(data.settings.maxVolume);
+
 	// Auto-lookup at 10 digits
 	$effect(() => {
 		if (cardInput.length === 10 && /^\d{10}$/.test(cardInput)) {
@@ -305,13 +309,13 @@
 						<input
 							type="range"
 							name="maxVolume"
+							bind:value={maxVolumeSlider}
 							min={MIN_VOLUME}
 							max={MAX_VOLUME}
-							value={data.settings.maxVolume}
 							class="range range-primary"
 						/>
 						<output class="min-w-[3rem] text-right font-mono text-lg font-bold">
-							{data.settings.maxVolume}%
+							{maxVolumeSlider}%
 						</output>
 					</div>
 					<label class="label">

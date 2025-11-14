@@ -55,17 +55,19 @@
 	/**
 	 * Initialize managers on mount
 	 */
-	onMount(async () => {
+	onMount(() => {
 		// Load settings and configure audio manager
-		try {
-			const response = await fetch('/api/settings');
-			if (response.ok) {
-				const settings = await response.json();
-				audioManager.setMaxVolume(settings.maxVolume);
+		(async () => {
+			try {
+				const response = await fetch('/api/settings');
+				if (response.ok) {
+					const settings = await response.json();
+					audioManager.setMaxVolume(settings.maxVolume);
+				}
+			} catch (error) {
+				console.error('Failed to load settings:', error);
 			}
-		} catch (error) {
-			console.error('Failed to load settings:', error);
-		}
+		})();
 
 		// Initialize managers
 		rfidManager.init(handleCardScanned);
