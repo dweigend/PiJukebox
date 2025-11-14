@@ -18,6 +18,45 @@ export function formatTitle(text: string): string {
 }
 
 /**
+ * Common umlaut conversion map for German characters
+ */
+const UMLAUT_MAP: Record<string, string> = {
+	ä: 'ae',
+	ö: 'oe',
+	ü: 'ue',
+	ß: 'ss',
+	Ä: 'Ae',
+	Ö: 'Oe',
+	Ü: 'Ue'
+};
+
+/**
+ * Sanitize folder name for safe filesystem and URL usage
+ * Converts special characters, umlauts, and spaces to filesystem-safe format
+ * @example
+ * sanitizeFolderName("Herr Jan") // => "herr_jan"
+ * sanitizeFolderName("Meine Musik (2024)") // => "meine_musik_2024"
+ */
+export function sanitizeFolderName(folderName: string): string {
+	return (
+		folderName
+			.trim()
+			// Replace umlauts
+			.replace(/[äöüßÄÖÜ]/g, (char) => UMLAUT_MAP[char] || char)
+			// Convert to lowercase
+			.toLowerCase()
+			// Replace spaces and special chars with underscores
+			.replace(/[\s()[\]{}]+/g, '_')
+			// Remove all non-alphanumeric except underscores and hyphens
+			.replace(/[^a-z0-9_-]/g, '')
+			// Replace multiple consecutive underscores/hyphens with single underscore
+			.replace(/[_-]+/g, '_')
+			// Remove leading/trailing underscores
+			.replace(/^_+|_+$/g, '')
+	);
+}
+
+/**
  * Sanitize filename for safe filesystem and URL usage
  * Converts special characters, umlauts, and spaces to filesystem-safe format
  * @example
@@ -29,21 +68,10 @@ export function sanitizeFilename(filename: string): string {
 	const extension = filename.match(/\.\w+$/)?.[0] || '';
 	const nameWithoutExt = filename.replace(/\.\w+$/, '');
 
-	// Umlaut conversion map
-	const umlautMap: Record<string, string> = {
-		ä: 'ae',
-		ö: 'oe',
-		ü: 'ue',
-		ß: 'ss',
-		Ä: 'Ae',
-		Ö: 'Oe',
-		Ü: 'Ue'
-	};
-
 	return (
 		nameWithoutExt
 			// Replace umlauts
-			.replace(/[äöüßÄÖÜ]/g, (char) => umlautMap[char] || char)
+			.replace(/[äöüßÄÖÜ]/g, (char) => UMLAUT_MAP[char] || char)
 			// Convert to lowercase
 			.toLowerCase()
 			// Replace spaces and special chars with hyphens

@@ -71,6 +71,7 @@ export async function getFolder(folderName: string): Promise<Folder | null> {
 
 /**
  * Create new music folder
+ * Note: Folder name should already be sanitized before calling this function
  */
 export async function createFolder(folderName: string): Promise<void> {
 	const folderPath = join(MUSIC_DIR, folderName);

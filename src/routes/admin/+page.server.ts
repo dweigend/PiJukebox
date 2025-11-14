@@ -19,6 +19,7 @@ import {
 	saveMP3,
 	folderExists
 } from '$lib/server/fileManager';
+import { sanitizeFolderName } from '$lib/utils/formatters';
 
 /**
  * Load all card mappings and available folders
@@ -100,36 +101,37 @@ export const actions: Actions = {
 	},
 
 	/**
-	 * Create new music folder
+	 * Create new music folder with automatic name sanitization
 	 */
 	createFolder: async ({ request }) => {
 		const formData = await request.formData();
-		const folderName = formData.get('folderName')?.toString().trim();
+		const inputFolderName = formData.get('folderName')?.toString().trim();
 
 		// Validation
-		if (!folderName) {
+		if (!inputFolderName) {
 			return fail(400, { error: 'Folder name is required' });
 		}
 
-		// Check for invalid characters
-		if (!FOLDER_NAME_PATTERN.test(folderName)) {
+		// Sanitize folder name
+		const sanitizedFolderName = sanitizeFolderName(inputFolderName);
+
+		// Check if folder already exists (after sanitization)
+		const exists = await folderExists(sanitizedFolderName);
+		if (exists) {
 			return fail(400, {
-				error: 'Folder name can only contain letters, numbers, underscores, and hyphens'
+				error: `Folder "${sanitizedFolderName}" already exists${inputFolderName !== sanitizedFolderName ? ` (sanitized from "${inputFolderName}")` : ''}`
 			});
 		}
 
-		// Check if folder already exists
-		const exists = await folderExists(folderName);
-		if (exists) {
-			return fail(400, { error: 'Folder already exists' });
-		}
-
-		// Create folder
-		await createFolder(folderName);
+		// Create folder with sanitized name
+		await createFolder(sanitizedFolderName);
 
 		return {
 			success: true,
-			message: `Folder "${folderName}" created successfully`
+			message:
+				inputFolderName === sanitizedFolderName
+					? `Folder "${sanitizedFolderName}" created successfully`
+					: `Folder created as "${sanitizedFolderName}" (sanitized from "${inputFolderName}")`
 		};
 	},
 
