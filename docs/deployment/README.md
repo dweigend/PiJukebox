@@ -72,6 +72,7 @@ DISPLAY=:0 chromium \
   --kiosk \
   --noerrdialogs \
   --disable-infobars \
+  --password-store=basic \
   http://localhost:3000 &
 ```
 
