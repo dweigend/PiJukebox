@@ -105,6 +105,31 @@ bun run start
 PORT=3000 HOST=0.0.0.0 bun run start
 ```
 
+### Remote Access
+
+Access the server from another device on your local network:
+
+**Via IP Address:**
+
+```bash
+# Find Pi's IP address (on the Pi):
+hostname -I
+
+# Access from Mac/PC:
+http://192.168.1.173:3000  # Replace with your Pi's IP
+```
+
+**Via mDNS (Easier):**
+
+```bash
+# Access from Mac/PC:
+http://raspberrypi.local:3000
+# or
+http://raspi-rfid.local:3000  # Use your Pi's hostname
+```
+
+**Note:** Server must be started with `HOST=0.0.0.0` for remote access (already configured in start script).
+
 ## Hardware Setup
 
 1. **RFID Scanner**: Connect USB RFID scanner (sends 10 digits + ENTER)

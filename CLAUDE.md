@@ -190,6 +190,12 @@ mcp__perplexity__quick_search(query: "lowdb API reference")
 4. Auto-play
 5. Controller (W/E/R) controls playback
 
+**Remote Access:**
+
+- **IP:** `http://192.168.1.XXX:3000` (find with `hostname -I` on Pi)
+- **mDNS:** `http://raspberrypi.local:3000` or `http://raspi-rfid.local:3000`
+- **Requirement:** Server must use `HOST=0.0.0.0` (already configured)
+
 ---
 
 ## Scope Control
