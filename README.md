@@ -15,14 +15,14 @@ This project is an RFID-controlled music player for children, designed as a Toni
 
 ## Features
 
-- 🎵 RFID card-controlled music playback
-- 🎹 USB keyboard controls (W/E/R for prev/pause/next)
-- 🖥️ Web admin interface for card management
-- 🔊 Auto-play next song
-- 📁 Folder-based playlists
-- 🎨 Minimalist, kid-friendly UI
-- 📤 Multiple MP3 file upload
-- ♻️ Clean, maintainable codebase
+- RFID card-controlled music playback
+- USB keyboard controls (W/E/R for prev/pause/next)
+- Web admin interface for card management
+- Auto-play next song
+- Folder-based playlists
+- Minimalist, kid-friendly UI
+- Multiple MP3 file upload
+- Clean, maintainable codebase
 
 ## Project Structure
 
@@ -95,11 +95,14 @@ bun run test
 ### Production Build
 
 ```bash
-# Build for production
+# Build for production (uses svelte-adapter-bun)
 bun run build
 
-# Preview production build
-bun run preview
+# Start production server
+bun run start
+
+# Optional: Start with custom host/port
+HOST=0.0.0.0 PORT=3000 bun run start
 ```
 
 ## Hardware Setup

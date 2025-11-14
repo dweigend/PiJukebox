@@ -22,10 +22,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ### Tech Stack
 
 - **SvelteKit** (Full-Stack: SSR + API Routes)
+- **svelte-adapter-bun** (Production deployment on Bun runtime)
 - **Svelte 5** (`$state` runes, NO stores in components)
 - **Tailwind CSS + DaisyUI** (NO custom CSS)
+- **heroicons-svelte** (Cross-platform SVG icons)
 - **howler.js** (Audio), **lowdb** (JSON DB)
-- **Bun** (Package Manager - NEVER npm/pnpm)
+- **Bun** (Package Manager & Runtime - NEVER npm/pnpm)
 
 ---
 
@@ -78,8 +80,8 @@ bun run test:e2e         # Playwright
 bun run test             # All tests
 
 # Build
-bun run build            # Production build
-bun run preview          # Preview build
+bun run build            # Production build (svelte-adapter-bun)
+bun run start            # Start production server
 ```
 
 ---
