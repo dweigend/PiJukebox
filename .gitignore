@@ -35,5 +35,5 @@ CLAUDE.md
 static/music/*
 !static/music/.gitkeep
 
-# Internal documentation
-docs/
+# Internal development documentation
+dev/
