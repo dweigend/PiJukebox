@@ -95,14 +95,14 @@ bun run test
 ### Production Build
 
 ```bash
-# Build for production (uses svelte-adapter-bun)
+# Build for production (uses @sveltejs/adapter-node)
 bun run build
 
-# Start production server
+# Start production server (runs Node.js under the hood)
 bun run start
 
 # Optional: Start with custom host/port
-HOST=0.0.0.0 PORT=3000 bun run start
+PORT=3000 HOST=0.0.0.0 bun run start
 ```
 
 ## Hardware Setup
