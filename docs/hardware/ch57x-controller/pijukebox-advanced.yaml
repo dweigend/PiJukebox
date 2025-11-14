@@ -1,31 +1,30 @@
 # PiJukebox Advanced Controller Configuration
-# Full 3×3 controller with volume and navigation controls
+# Alternative configuration using media keys instead of letter keys
+# 3×1 controller with 1 rotary knob
 #
-# Row 1: Volume controls
-# Row 2: Playback controls (W/E/R)
-# Row 3: Navigation/utility keys
+# This configuration uses dedicated media control keys for playback,
+# which work system-wide without application focus.
+#
+# NOTE: PiJukebox's KeyboardManager expects W/E/R keys by default.
+# Use this configuration only if you modify KeyboardManager to listen
+# for media keys, or for system-wide media control outside PiJukebox.
 
-orientation: normal
+keys:
+  # Key 1 (left): Next track (media key)
+  - keycode: [KC_MEDIA_NEXT_TRACK]
 
-# Device specifications
-rows: 3
-columns: 3
-knobs: 0
+  # Key 2 (middle): Play/Pause (media key)
+  - keycode: [KC_MEDIA_PLAY_PAUSE]
 
-# Layer 1: Full control layout
-layers:
-  - buttons:
-      # Row 1: Volume controls
-      - - 'volumedown' # Decrease volume
-        - 'mute' # Mute/Unmute
-        - 'volumeup' # Increase volume
+  # Key 3 (right): Previous track (media key)
+  - keycode: [KC_MEDIA_PREVIOUS_TRACK]
 
-      # Row 2: Playback controls
-      - - 'w' # Previous track
-        - 'e' # Pause/Play toggle
-        - 'r' # Next track
+knob:
+  # Knob: Rotate Counter-Clockwise
+  - keycode: [KC_MEDIA_VOLUME_DOWN]
 
-      # Row 3: Navigation/utility
-      - - 'home' # Return to home screen
-        - 'f5' # Refresh page
-        - 'esc' # Exit fullscreen
+  # Knob: Rotate Clockwise
+  - keycode: [KC_MEDIA_VOLUME_UP]
+
+  # Knob: Press
+  - keycode: [KC_MEDIA_MUTE]

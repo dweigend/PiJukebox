@@ -4,7 +4,8 @@ Setup guide for configuring CH57x-based USB macro keyboards for PiJukebox playba
 
 > **Note:** This project uses a **CH57x USB controller (3×1 with 1 rotary knob)** configured with:
 >
-> - **W/E/R keys** for Previous/Pause/Next playback control
+> - **W/E/R keys** for playback control (W=Previous, E=Pause/Play, R=Next)
+> - **Physical buttons** send R/E/W (left to right) to match KeyboardManager code
 > - **Rotary knob** for Volume control (rotate) + Mute (press)
 >
 > Reference image: [3×1 Keyboard](https://github.com/kriomant/ch57x-keyboard-tool/blob/master/doc/keyboard-3-1.jpg)
@@ -118,97 +119,93 @@ sudo udevadm trigger
 
 ## Configuration for PiJukebox
 
-### Basic W/E/R Configuration
+### Standard Configuration (3×1 + 1 Knob)
 
-Create a configuration file for playback control:
+This is the PiJukebox standard setup for the VBESTLIFE 3-Key/1-Knob controller.
 
 **File:** `pijukebox-controller.yaml`
 
 ```yaml
 # PiJukebox Playback Controller Configuration
-# W = Previous, E = Pause/Play, R = Next
+# 3×1 controller with 1 rotary knob (PiJukebox standard setup)
+# VBESTLIFE Macro-Keyboard with Red Switch (3 Keys 1 Knob)
+#
+# Physical button layout and their keycodes:
+#   Key 1 (left): R = Next track
+#   Key 2 (middle): E = Pause/Play toggle
+#   Key 3 (right): W = Previous track
+#
+# KeyboardManager code mapping (POINT OF TRUTH):
+#   W key press → Previous track (onPrevious)
+#   E key press → Pause/Play (onPausePlay)
+#   R key press → Next track (onNext)
+#
+# Knob: Volume control
+#   Rotate Counter-clockwise = Volume down
+#   Rotate Clockwise = Volume up
+#   Press = Mute/Unmute
 
-orientation: normal
+keys:
+  # Key 1 (left): Next track
+  - keycode: [KC_R]
 
-# Device specifications (adjust based on your controller)
-rows: 1
-columns: 3
-knobs: 0
+  # Key 2 (middle): Pause/Play toggle
+  - keycode: [KC_E]
 
-# Layer 1: Playback controls
-layers:
-  - buttons:
-      - - 'w' # Previous track
-        - 'e' # Pause/Play toggle
-        - 'r' # Next track
+  # Key 3 (right): Previous track
+  - keycode: [KC_W]
+
+knob:
+  # Knob: Rotate Counter-Clockwise
+  - keycode: [KC_MEDIA_VOLUME_DOWN]
+
+  # Knob: Rotate Clockwise
+  - keycode: [KC_MEDIA_VOLUME_UP]
+
+  # Knob: Press
+  - keycode: [KC_MEDIA_MUTE]
 ```
 
-### Advanced Configuration (Multi-row Controller)
+### Alternative: Media Keys Configuration
 
-For controllers with more buttons:
+If you prefer system-wide media control keys instead of letter keys:
 
 **File:** `pijukebox-advanced.yaml`
 
 ```yaml
-orientation: normal
+# PiJukebox Advanced Controller Configuration
+# Alternative configuration using media keys instead of letter keys
+# 3×1 controller with 1 rotary knob
+#
+# This configuration uses dedicated media control keys for playback,
+# which work system-wide without application focus.
+#
+# NOTE: PiJukebox's KeyboardManager expects W/E/R keys by default.
+# Use this configuration only if you modify KeyboardManager to listen
+# for media keys, or for system-wide media control outside PiJukebox.
 
-rows: 3
-columns: 3
-knobs: 0
+keys:
+  # Key 1 (left): Next track (media key)
+  - keycode: [KC_MEDIA_NEXT_TRACK]
 
-layers:
-  # Layer 1: Main playback controls
-  - buttons:
-      # Row 1: Volume controls (optional)
-      - - 'volumedown'
-        - 'mute'
-        - 'volumeup'
+  # Key 2 (middle): Play/Pause (media key)
+  - keycode: [KC_MEDIA_PLAY_PAUSE]
 
-      # Row 2: Playback controls
-      - - 'w' # Previous
-        - 'e' # Pause/Play
-        - 'r' # Next
+  # Key 3 (right): Previous track (media key)
+  - keycode: [KC_MEDIA_PREVIOUS_TRACK]
 
-      # Row 3: Additional functions (customize as needed)
-      - - 'home' # Return to home
-        - 'f5' # Refresh
-        - 'esc' # Exit fullscreen
+knob:
+  # Knob: Rotate Counter-Clockwise
+  - keycode: [KC_MEDIA_VOLUME_DOWN]
+
+  # Knob: Rotate Clockwise
+  - keycode: [KC_MEDIA_VOLUME_UP]
+
+  # Knob: Press
+  - keycode: [KC_MEDIA_MUTE]
 ```
 
-### Configuration with Knobs
-
-If your controller has rotary encoders:
-
-```yaml
-orientation: normal
-
-rows: 3
-columns: 3
-knobs: 2
-
-layers:
-  - buttons:
-      - - 'w'
-        - 'e'
-        - 'r'
-      - - 'home'
-        - 'f5'
-        - 'esc'
-      - - '1'
-        - '2'
-        - '3'
-
-    knobs:
-      # Knob 1: Volume control
-      - ccw: 'volumedown'
-        press: 'mute'
-        cw: 'volumeup'
-
-      # Knob 2: Track navigation
-      - ccw: 'w' # Previous track
-        press: 'e' # Pause/Play
-        cw: 'r' # Next track
-```
+**Note:** Media keys work system-wide without application focus, but PiJukebox's KeyboardManager expects W/E/R keys. Use the standard configuration (letter keys) unless you modify the KeyboardManager code.
 
 ## Upload Configuration
 
@@ -286,14 +283,23 @@ ch57x-keyboard-tool show-keys
 The PiJukebox KeyboardManager (`src/lib/managers/KeyboardManager.svelte.ts`) listens for W/E/R key events:
 
 ```typescript
-// W = Previous track
-// E = Pause/Play toggle
-// R = Next track
+// KeyboardManager code mapping (POINT OF TRUTH):
+// W key press → Previous track (onPrevious)
+// E key press → Pause/Play (onPausePlay)
+// R key press → Next track (onNext)
 ```
+
+**Physical Button Configuration:**
+
+The controller buttons are configured to send keys that match the code behavior:
+
+- **Left button** (Key 1) sends **R** → triggers Next track
+- **Middle button** (Key 2) sends **E** → triggers Pause/Play
+- **Right button** (Key 3) sends **W** → triggers Previous track
 
 **Recommended Configuration:**
 
-- Use simple letter keys (w, e, r) instead of media keys
+- Use simple letter keys (R, E, W) as shown in `pijukebox-controller.yaml`
 - Avoid modifier keys (Ctrl, Alt) for main playback controls
 - Keep configuration on Layer 1 only (no layer switching needed)
 
@@ -367,9 +373,8 @@ ch57x-keyboard-tool led 0 press 4          # Press-reactive, level 4
 
 Configuration examples are included in this directory:
 
-- `pijukebox-controller.yaml` - Basic 3-button setup (W/E/R)
-- `pijukebox-advanced.yaml` - Full controller with volume controls
-- `pijukebox-knobs.yaml` - Configuration with rotary encoders
+- `pijukebox-controller.yaml` - **Standard setup:** W/E/R letter keys + Volume knob
+- `pijukebox-advanced.yaml` - **Alternative:** Media keys instead of letter keys
 
 ## Additional Resources
 

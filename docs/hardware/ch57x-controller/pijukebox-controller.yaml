@@ -1,33 +1,38 @@
 # PiJukebox Playback Controller Configuration
 # 3×1 controller with 1 rotary knob (PiJukebox standard setup)
+# VBESTLIFE Macro-Keyboard with Red Switch (3 Keys 1 Knob)
 #
-# Buttons: W / E / R
-#   W = Previous track
-#   E = Pause/Play toggle
-#   R = Next track
+# Physical button layout and their keycodes:
+#   Key 1 (left): R = Next track
+#   Key 2 (middle): E = Pause/Play toggle
+#   Key 3 (right): W = Previous track
+#
+# KeyboardManager code mapping (POINT OF TRUTH):
+#   W key press → Previous track (onPrevious)
+#   E key press → Pause/Play (onPausePlay)
+#   R key press → Next track (onNext)
 #
 # Knob: Volume control
-#   Counter-clockwise = Volume down
+#   Rotate Counter-clockwise = Volume down
+#   Rotate Clockwise = Volume up
 #   Press = Mute/Unmute
-#   Clockwise = Volume up
 
-orientation: normal
+keys:
+  # Key 1 (left): Next track
+  - keycode: [KC_R]
 
-# Device specifications: 3×1 with 1 knob
-rows: 1
-columns: 3
-knobs: 1
+  # Key 2 (middle): Pause/Play toggle
+  - keycode: [KC_E]
 
-# Layer 1: Playback controls + Volume
-layers:
-  - buttons:
-      # Row 1: W, E, R keys for playback
-      - - 'w' # Previous track
-        - 'e' # Pause/Play toggle
-        - 'r' # Next track
+  # Key 3 (right): Previous track
+  - keycode: [KC_W]
 
-    knobs:
-      # Knob 1: Volume control
-      - ccw: 'volumedown' # Counter-clockwise: decrease volume
-        press: 'mute' # Press: mute/unmute
-        cw: 'volumeup' # Clockwise: increase volume
+knob:
+  # Knob: Rotate Counter-Clockwise
+  - keycode: [KC_MEDIA_VOLUME_DOWN]
+
+  # Knob: Rotate Clockwise
+  - keycode: [KC_MEDIA_VOLUME_UP]
+
+  # Knob: Press
+  - keycode: [KC_MEDIA_MUTE]
