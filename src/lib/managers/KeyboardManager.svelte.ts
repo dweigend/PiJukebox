@@ -1,7 +1,7 @@
 /**
- * KeyboardManager - Handles keyboard and media key controls
+ * KeyboardManager - Handles keyboard controls
  * W = Previous, E = Pause/Play, R = Next
- * Volume Knob = VolumeUp/Down/Mute (Media Keys)
+ * Arrow Up/Down = Volume Up/Down, Space = Mute
  */
 
 class KeyboardManager {
@@ -74,28 +74,13 @@ class KeyboardManager {
 				this.isRPressed = true;
 				this.#onNext?.();
 				break;
-			case 'audiovolumeup':
-				console.log('[DEBUG Volume] Key event:', {
-					key: event.key,
-					code: event.code,
-					callback: this.#onVolumeUp ? 'exists' : 'MISSING'
-				});
+			case 'arrowup': // CH57x Controller (new config) or Keyboard Arrow Up
 				this.#onVolumeUp?.();
 				break;
-			case 'audiovolumedown':
-				console.log('[DEBUG Volume] Key event:', {
-					key: event.key,
-					code: event.code,
-					callback: this.#onVolumeDown ? 'exists' : 'MISSING'
-				});
+			case 'arrowdown': // CH57x Controller (new config) or Keyboard Arrow Down
 				this.#onVolumeDown?.();
 				break;
-			case 'audiovolumemute':
-				console.log('[DEBUG Volume] Key event:', {
-					key: event.key,
-					code: event.code,
-					callback: this.#onMute ? 'exists' : 'MISSING'
-				});
+			case ' ': // CH57x Controller (Space) or Keyboard Space
 				this.#onMute?.();
 				break;
 		}
