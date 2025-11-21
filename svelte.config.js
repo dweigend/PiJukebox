@@ -12,7 +12,12 @@ const config = {
 		adapter: adapter({
 			out: 'build',
 			precompress: true
-		})
+		}),
+		// Disable CSRF origin check for local network access
+		// Safe because Pi is only accessible within home network
+		csrf: {
+			checkOrigin: false
+		}
 	}
 };
 
