@@ -128,6 +128,8 @@ http://raspberrypi.local:3000
 
 **Note:** Server must be started with `HOST=0.0.0.0` for remote access (already configured in start script).
 
+🚨 **Security:** CSRF origin checks are disabled for local network access—do NOT expose to the internet without reconfiguring (see [Security Guide](docs/deployment/README.md#security)).
+
 ## Hardware Setup
 
 1. **RFID Scanner**: Connect USB RFID scanner (sends 10 digits + ENTER)

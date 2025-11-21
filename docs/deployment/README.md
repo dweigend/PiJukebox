@@ -127,3 +127,63 @@ bun run start --host
 - **Local**: `http://localhost:3000`
 - **Network**: `http://<PI_IP>:3000` (find with `hostname -I`)
 - **mDNS**: `http://raspberrypi.local:3000`
+
+---
+
+## Security
+
+### CSRF Protection
+
+**Current Configuration:** CSRF origin checks are **disabled** in `svelte.config.js`:
+
+```javascript
+csrf: {
+	checkOrigin: false;
+}
+```
+
+**Why disabled:**
+
+- Allows access from any device in your local network (Mac, phone, tablet)
+- Necessary for remote admin access via IP address (e.g., `http://192.168.1.177:3000/admin`)
+
+**Security Status:**
+
+✅ **SAFE for:**
+
+- Local network only (home network, no internet access)
+- Raspberry Pi without port forwarding
+- Internal use (family/household)
+
+❌ **UNSAFE for:**
+
+- Internet-exposed servers (port forwarding enabled)
+- Public IP addresses
+- Cloud deployments
+
+**If you need to expose this to the internet:**
+
+1. Enable CSRF origin check in `svelte.config.js`:
+
+```javascript
+csrf: {
+	checkOrigin: true;
+}
+```
+
+2. Configure allowed origins (if using reverse proxy):
+
+```javascript
+csrf: {
+  checkOrigin: true,
+  origin: ['https://yourdomain.com']
+}
+```
+
+3. Consider additional security:
+   - Add authentication (basic auth, OAuth)
+   - Use HTTPS (Let's Encrypt, reverse proxy)
+   - Implement rate limiting
+   - Use a VPN instead of public exposure
+
+**Recommendation:** Keep the Pi on your local network only. Use VPN or Tailscale for remote access from outside your home.
