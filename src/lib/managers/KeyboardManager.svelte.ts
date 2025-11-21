@@ -58,31 +58,47 @@ class KeyboardManager {
 	#handleKeyDown = (event: KeyboardEvent) => {
 		const key = event.key.toLowerCase();
 
+		// Debug logging
+		console.log('[KeyboardManager] Key pressed:', {
+			key: event.key,
+			keyLower: key,
+			code: event.code,
+			repeat: event.repeat
+		});
+
 		// Prevent repeated triggers when key is held
 		if (event.repeat) return;
 
 		switch (key) {
 			case 'w':
 				this.isWPressed = true;
+				console.log('[KeyboardManager] Triggering Previous');
 				this.#onPrevious?.();
 				break;
 			case 'e':
 				this.isEPressed = true;
+				console.log('[KeyboardManager] Triggering Pause/Play');
 				this.#onPausePlay?.();
 				break;
 			case 'r':
 				this.isRPressed = true;
+				console.log('[KeyboardManager] Triggering Next');
 				this.#onNext?.();
 				break;
 			case 'audiovolumeup':
+				console.log('[KeyboardManager] Triggering Volume Up');
 				this.#onVolumeUp?.();
 				break;
 			case 'audiovolumedown':
+				console.log('[KeyboardManager] Triggering Volume Down');
 				this.#onVolumeDown?.();
 				break;
 			case 'audiovolumemute':
+				console.log('[KeyboardManager] Triggering Mute');
 				this.#onMute?.();
 				break;
+			default:
+				console.log('[KeyboardManager] Unhandled key:', key);
 		}
 	};
 
