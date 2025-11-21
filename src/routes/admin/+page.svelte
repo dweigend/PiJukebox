@@ -233,7 +233,7 @@
 						name="folderName"
 						placeholder="e.g., my_album_name"
 						class="input-bordered input input-sm w-full"
-						pattern="[a-zA-Z0-9_-]+"
+						pattern="[a-zA-Z0-9_\-]+"
 						required
 					/>
 					<label class="label">
