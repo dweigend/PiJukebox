@@ -1,7 +1,7 @@
 /**
- * KeyboardManager - Handles keyboard and media key controls
+ * KeyboardManager - Handles keyboard controls
  * W = Previous, E = Pause/Play, R = Next
- * Volume Knob = VolumeUp/Down/Mute (Media Keys)
+ * Arrow Up/Down = Volume Up/Down, Space = Mute
  */
 
 class KeyboardManager {
@@ -58,47 +58,31 @@ class KeyboardManager {
 	#handleKeyDown = (event: KeyboardEvent) => {
 		const key = event.key.toLowerCase();
 
-		// Debug logging
-		console.log('[KeyboardManager] Key pressed:', {
-			key: event.key,
-			keyLower: key,
-			code: event.code,
-			repeat: event.repeat
-		});
-
 		// Prevent repeated triggers when key is held
 		if (event.repeat) return;
 
 		switch (key) {
 			case 'w':
 				this.isWPressed = true;
-				console.log('[KeyboardManager] Triggering Previous');
 				this.#onPrevious?.();
 				break;
 			case 'e':
 				this.isEPressed = true;
-				console.log('[KeyboardManager] Triggering Pause/Play');
 				this.#onPausePlay?.();
 				break;
 			case 'r':
 				this.isRPressed = true;
-				console.log('[KeyboardManager] Triggering Next');
 				this.#onNext?.();
 				break;
-			case 'audiovolumeup':
-				console.log('[KeyboardManager] Triggering Volume Up');
+			case 'arrowup': // CH57x Controller (new config) or Keyboard Arrow Up
 				this.#onVolumeUp?.();
 				break;
-			case 'audiovolumedown':
-				console.log('[KeyboardManager] Triggering Volume Down');
+			case 'arrowdown': // CH57x Controller (new config) or Keyboard Arrow Down
 				this.#onVolumeDown?.();
 				break;
-			case 'audiovolumemute':
-				console.log('[KeyboardManager] Triggering Mute');
+			case ' ': // CH57x Controller (Space) or Keyboard Space
 				this.#onMute?.();
 				break;
-			default:
-				console.log('[KeyboardManager] Unhandled key:', key);
 		}
 	};
 

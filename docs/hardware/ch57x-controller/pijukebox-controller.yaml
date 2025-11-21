@@ -1,28 +1,45 @@
-# PiJukebox Playback Controller Configuration
-# 3×1 controller with 1 rotary knob (PiJukebox standard setup)
+# PiJukebox Controller Configuration - Arrow Keys for Volume
+# Modified: 2025-11-21
+# Reason: Browser cannot receive System Volume Keys (volumeup/volumedown/mute)
+#
+# 3×1 controller with 1 rotary knob (PiJukebox setup)
 # VBESTLIFE Macro-Keyboard with Red Switch (3 Keys 1 Knob)
 #
-# Physical button layout and their keycodes:
+# Physical button layout:
 #   Key 1 (left): "r" → Next track
 #   Key 2 (middle): "e" → Pause/Play toggle
 #   Key 3 (right): "w" → Previous track
 #
-# KeyboardManager code mapping (POINT OF TRUTH):
-#   W key press → Previous track (onPrevious)
-#   E key press → Pause/Play (onPausePlay)
-#   R key press → Next track (onNext)
+# KeyboardManager code mapping:
+#   W key → Previous track (onPrevious)
+#   E key → Pause/Play (onPausePlay)
+#   R key → Next track (onNext)
+#   Arrow Up → Volume up (onVolumeUp)
+#   Arrow Down → Volume down (onVolumeDown)
+#   Space → Mute/Unmute (onMute)
 #
-# Knob actions:
-#   Rotate Counter-clockwise → Volume down
-#   Rotate Clockwise → Volume up
-#   Press → Mute/Unmute
+# Knob actions (CHANGED - now uses Arrow Keys):
+#   Rotate Counter-clockwise → Arrow Down (Volume down)
+#   Rotate Clockwise → Arrow Up (Volume up)
+#   Press → Space (Mute/Unmute)
+#
+# WHY ARROW KEYS?
+# - Browser CAN receive Arrow keys (unlike system volume keys)
+# - Intuitive: Up = louder, Down = quieter
+# - Works with normal keyboard as backup control
 #
 # NOTE: No KC_ prefix! Use lowercase keycode names from `ch57x-keyboard-tool show-keys`
 
+# Device configuration
+orientation: 'normal'
+rows: 1
+columns: 3
+knobs: 1
+
 layers:
   - buttons:
-      - ['r', 'e', 'w'] # Single row: left, middle, right
+      - ['r', 'e', 'w'] # Single row: left, middle, right (unchanged)
     knobs:
-      - ccw: 'volumedown' # Counter-clockwise rotation
-        press: 'mute' # Knob press
-        cw: 'volumeup' # Clockwise rotation
+      - ccw: 'down' # Counter-clockwise rotation → Arrow Down
+        press: 'space' # Knob press → Space Bar
+        cw: 'up' # Clockwise rotation → Arrow Up
