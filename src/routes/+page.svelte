@@ -56,18 +56,8 @@
 	 * Initialize managers on mount
 	 */
 	onMount(() => {
-		// Load settings and configure audio manager
-		(async () => {
-			try {
-				const response = await fetch('/api/settings');
-				if (response.ok) {
-					const settings = await response.json();
-					audioManager.setMaxVolume(settings.maxVolume);
-				}
-			} catch (error) {
-				console.error('Failed to load settings:', error);
-			}
-		})();
+		// Initialize audio manager (loads volume settings from DB)
+		audioManager.init();
 
 		// Initialize managers
 		rfidManager.init(handleCardScanned);

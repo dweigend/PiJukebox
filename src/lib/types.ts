@@ -56,6 +56,10 @@ export interface Playlist {
 export interface Settings {
 	/** Maximum volume (1-100%) */
 	maxVolume: number;
+	/** Current volume (1-100%) */
+	currentVolume: number;
+	/** Mute status */
+	isMuted: boolean;
 }
 
 /**

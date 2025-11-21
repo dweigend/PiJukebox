@@ -23,6 +23,43 @@ class AudioManager {
 	#volumeBeforeMute: number = 0.8;
 
 	/**
+	 * Initialize AudioManager - load volume settings from database
+	 */
+	async init() {
+		try {
+			const response = await fetch('/api/volume');
+			const settings = await response.json();
+
+			// Convert from percentage (1-100) to normalized (0-1) for Howler.js
+			this.currentVolume = settings.currentVolume / 100;
+			this.maxVolume = settings.maxVolume / 100;
+			this.isMuted = settings.isMuted;
+		} catch (error) {
+			console.error('Failed to load volume settings:', error);
+			// Keep defaults
+		}
+	}
+
+	/**
+	 * Save current volume settings to database
+	 */
+	async saveSettings() {
+		try {
+			await fetch('/api/volume', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({
+					currentVolume: Math.round(this.currentVolume * 100),
+					maxVolume: Math.round(this.maxVolume * 100),
+					isMuted: this.isMuted
+				})
+			});
+		} catch (error) {
+			console.error('Failed to save volume settings:', error);
+		}
+	}
+
+	/**
 	 * Load a playlist and prepare for playback
 	 */
 	loadPlaylist(newPlaylist: Playlist) {
@@ -96,6 +133,9 @@ class AudioManager {
 		if (this.currentVolume > this.maxVolume) {
 			this.setVolume(Math.round(this.maxVolume * 100));
 		}
+
+		// Persist to database
+		this.saveSettings();
 	}
 
 	/**
@@ -113,6 +153,9 @@ class AudioManager {
 		if (this.isMuted && percentage > 0) {
 			this.isMuted = false;
 		}
+
+		// Persist to database
+		this.saveSettings();
 	}
 
 	/**
@@ -136,6 +179,7 @@ class AudioManager {
 
 	/**
 	 * Toggle mute on/off
+	 * Note: howler.js also has mute() method, but current implementation works
 	 */
 	toggleMute() {
 		if (this.isMuted) {
@@ -154,6 +198,9 @@ class AudioManager {
 			}
 			this.isMuted = true;
 		}
+
+		// Persist to database
+		this.saveSettings();
 	}
 
 	/**

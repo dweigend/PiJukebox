@@ -5,7 +5,7 @@
 
 import { JSONFilePreset } from 'lowdb/node';
 import type { DatabaseSchema, Settings } from '$lib/types';
-import { DEFAULT_MAX_VOLUME } from '$lib/constants';
+import { DEFAULT_MAX_VOLUME, DEFAULT_CURRENT_VOLUME } from '$lib/constants';
 
 const DB_PATH = 'data/db.json';
 
@@ -13,7 +13,9 @@ const DB_PATH = 'data/db.json';
 const defaultData: DatabaseSchema = {
 	cards: {},
 	settings: {
-		maxVolume: DEFAULT_MAX_VOLUME
+		maxVolume: DEFAULT_MAX_VOLUME,
+		currentVolume: DEFAULT_CURRENT_VOLUME,
+		isMuted: false
 	}
 };
 
@@ -74,7 +76,13 @@ export async function getAllMappings(): Promise<Record<string, string>> {
  */
 export async function getSettings(): Promise<Settings> {
 	const database = await initDb();
-	return database.data.settings ?? { maxVolume: DEFAULT_MAX_VOLUME };
+	return (
+		database.data.settings ?? {
+			maxVolume: DEFAULT_MAX_VOLUME,
+			currentVolume: DEFAULT_CURRENT_VOLUME,
+			isMuted: false
+		}
+	);
 }
 
 /**
@@ -84,7 +92,11 @@ export async function updateSettings(settings: Partial<Settings>): Promise<void>
 	const database = await initDb();
 	await database.update((data) => {
 		if (!data.settings) {
-			data.settings = { maxVolume: DEFAULT_MAX_VOLUME };
+			data.settings = {
+				maxVolume: DEFAULT_MAX_VOLUME,
+				currentVolume: DEFAULT_CURRENT_VOLUME,
+				isMuted: false
+			};
 		}
 		Object.assign(data.settings, settings);
 	});
