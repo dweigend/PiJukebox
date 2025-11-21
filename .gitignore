@@ -29,6 +29,7 @@ vite.config.ts.timestamp-*
 
 # AI Assistant (keep private)
 CLAUDE.md
+AGENTS.md
 .claude/
 
 # Music files (user-specific)
