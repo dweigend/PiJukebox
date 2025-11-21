@@ -165,6 +165,12 @@ class AudioManager {
 		const currentPercentage = Math.round(this.currentVolume * 100);
 		const maxPercentage = Math.round(this.maxVolume * 100);
 		const newPercentage = Math.min(currentPercentage + VOLUME_STEP, maxPercentage);
+		console.log('[DEBUG Volume] volumeUp() called:', {
+			current: currentPercentage + '%',
+			max: maxPercentage + '%',
+			new: newPercentage + '%',
+			howlExists: !!this.#howl
+		});
 		this.setVolume(newPercentage);
 	}
 
@@ -174,6 +180,11 @@ class AudioManager {
 	volumeDown() {
 		const currentPercentage = Math.round(this.currentVolume * 100);
 		const newPercentage = Math.max(currentPercentage - VOLUME_STEP, MIN_VOLUME);
+		console.log('[DEBUG Volume] volumeDown() called:', {
+			current: currentPercentage + '%',
+			new: newPercentage + '%',
+			howlExists: !!this.#howl
+		});
 		this.setVolume(newPercentage);
 	}
 

@@ -75,12 +75,27 @@ class KeyboardManager {
 				this.#onNext?.();
 				break;
 			case 'audiovolumeup':
+				console.log('[DEBUG Volume] Key event:', {
+					key: event.key,
+					code: event.code,
+					callback: this.#onVolumeUp ? 'exists' : 'MISSING'
+				});
 				this.#onVolumeUp?.();
 				break;
 			case 'audiovolumedown':
+				console.log('[DEBUG Volume] Key event:', {
+					key: event.key,
+					code: event.code,
+					callback: this.#onVolumeDown ? 'exists' : 'MISSING'
+				});
 				this.#onVolumeDown?.();
 				break;
 			case 'audiovolumemute':
+				console.log('[DEBUG Volume] Key event:', {
+					key: event.key,
+					code: event.code,
+					callback: this.#onMute ? 'exists' : 'MISSING'
+				});
 				this.#onMute?.();
 				break;
 		}
