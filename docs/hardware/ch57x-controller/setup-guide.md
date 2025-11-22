@@ -151,46 +151,16 @@ layers:
   - buttons:
       - ['r', 'e', 'w'] # Single row: left, middle, right
     knobs:
-      - ccw: 'volumedown' # Counter-clockwise rotation
-        press: 'mute' # Knob press
-        cw: 'volumeup' # Clockwise rotation
+      - ccw: 'down' # Arrow Down (Volume down)
+        press: 'space' # Space (Mute/Unmute)
+        cw: 'up' # Arrow Up (Volume up)
 ```
 
-### Alternative: Media Keys Configuration
+**Why Arrow Keys?**
 
-If you prefer system-wide media control keys instead of letter keys:
-
-**File:** `pijukebox-advanced.yaml`
-
-```yaml
-# PiJukebox Advanced Controller Configuration
-# Alternative configuration using media keys instead of letter keys
-# 3×1 controller with 1 rotary knob
-#
-# This configuration uses dedicated media control keys for playback,
-# which work system-wide without application focus.
-#
-# IMPORTANT: PiJukebox's KeyboardManager expects W/E/R keys by default.
-# Use this configuration only if you modify KeyboardManager to listen
-# for media keys, or for system-wide media control outside PiJukebox.
-#
-# Physical button layout:
-#   Key 1 (left): "next" → Next track (media key)
-#   Key 2 (middle): "play" → Play/Pause (media key)
-#   Key 3 (right): "prev" → Previous track (media key)
-#
-# NOTE: No KC_ prefix! Use lowercase keycode names from `ch57x-keyboard-tool show-keys`
-
-layers:
-  - buttons:
-      - ['next', 'play', 'prev'] # Single row: left, middle, right
-    knobs:
-      - ccw: 'volumedown' # Counter-clockwise rotation
-        press: 'mute' # Knob press
-        cw: 'volumeup' # Clockwise rotation
-```
-
-**Note:** Media keys work system-wide without application focus, but PiJukebox's KeyboardManager expects W/E/R keys. Use the standard configuration (letter keys) unless you modify the KeyboardManager code.
+- Browser CAN receive Arrow keys (system volume keys are blocked)
+- Intuitive: Up = louder, Down = quieter
+- Works with normal keyboard as backup control
 
 ## Upload Configuration
 
@@ -288,10 +258,25 @@ The controller buttons are configured to send keys that match the code behavior:
 - **Middle button** (Key 2) sends **E** → triggers Pause/Play
 - **Right button** (Key 3) sends **W** → triggers Previous track
 
+**Volume Knob Configuration:**
+
+The rotary knob is configured to send Arrow Keys for volume control:
+
+- **Clockwise rotation** sends **Arrow Up** → triggers Volume Up
+- **Counter-clockwise rotation** sends **Arrow Down** → triggers Volume Down
+- **Knob press** sends **Space** → triggers Mute/Unmute
+
+**Why Arrow Keys?**
+
+- Browser CAN receive Arrow keys (system volume keys are blocked by browser security)
+- Intuitive mapping: Up = louder, Down = quieter
+- Works with regular keyboard as backup control
+
 **Recommended Configuration:**
 
-- Use simple letter keys (R, E, W) as shown in `pijukebox-controller.yaml`
-- Avoid modifier keys (Ctrl, Alt) for main playback controls
+- Use simple letter keys (R, E, W) for playback controls
+- Use Arrow Keys (up, down, space) for volume controls
+- Avoid modifier keys (Ctrl, Alt) for main controls
 - Keep configuration on Layer 1 only (no layer switching needed)
 
 ## Troubleshooting
@@ -362,10 +347,9 @@ ch57x-keyboard-tool led 0 press 4          # Press-reactive, level 4
 
 ## Example Files
 
-Configuration examples are included in this directory:
+Configuration example in this directory:
 
-- `pijukebox-controller.yaml` - **Standard setup:** R/E/W letter keys + Volume knob (matches KeyboardManager)
-- `pijukebox-advanced.yaml` - **Alternative:** Media keys (next/play/prev) instead of letter keys
+- `pijukebox-controller.yaml` - **Standard setup:** R/E/W letter keys + Arrow Keys for volume (matches KeyboardManager)
 
 ## Additional Resources
 
