@@ -192,7 +192,7 @@ export const actions: Actions = {
 
 			// Check file size
 			if (file.size > UPLOAD_MAX_SIZE_BYTES) {
-				return fail(400, { error: `File "${file.name}" exceeds 10MB limit` });
+				return fail(400, { error: `File "${file.name}" exceeds 500MB limit` });
 			}
 
 			// Save MP3 (filename will be sanitized automatically)

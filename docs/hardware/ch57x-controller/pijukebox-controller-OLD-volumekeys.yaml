@@ -1,0 +1,28 @@
+# PiJukebox Playback Controller Configuration
+# 3×1 controller with 1 rotary knob (PiJukebox standard setup)
+# VBESTLIFE Macro-Keyboard with Red Switch (3 Keys 1 Knob)
+#
+# Physical button layout and their keycodes:
+#   Key 1 (left): "r" → Next track
+#   Key 2 (middle): "e" → Pause/Play toggle
+#   Key 3 (right): "w" → Previous track
+#
+# KeyboardManager code mapping (POINT OF TRUTH):
+#   W key press → Previous track (onPrevious)
+#   E key press → Pause/Play (onPausePlay)
+#   R key press → Next track (onNext)
+#
+# Knob actions:
+#   Rotate Counter-clockwise → Volume down
+#   Rotate Clockwise → Volume up
+#   Press → Mute/Unmute
+#
+# NOTE: No KC_ prefix! Use lowercase keycode names from `ch57x-keyboard-tool show-keys`
+
+layers:
+  - buttons:
+      - ['r', 'e', 'w'] # Single row: left, middle, right
+    knobs:
+      - ccw: 'volumedown' # Counter-clockwise rotation
+        press: 'mute' # Knob press
+        cw: 'volumeup' # Clockwise rotation
