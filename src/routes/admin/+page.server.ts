@@ -10,7 +10,9 @@ import {
 	CARD_ID_PATTERN,
 	UPLOAD_MAX_SIZE_BYTES,
 	MIN_VOLUME,
-	MAX_VOLUME
+	MAX_VOLUME,
+	DEFAULT_MAX_VOLUME,
+	DEFAULT_CURRENT_VOLUME
 } from '$lib/constants';
 import {
 	getAllMappings,
@@ -32,27 +34,40 @@ import { sanitizeFolderName } from '$lib/utils/formatters';
  * Load all card mappings, available folders, and settings
  */
 export const load: PageServerLoad = async () => {
-	const mappings = await getAllMappings();
-	const folders = await getAllFolders();
-	const settings = await getSettings();
+	try {
+		const mappings = await getAllMappings();
+		const folders = await getAllFolders();
+		const settings = await getSettings();
 
-	// Build mappings with song counts
-	const mappingsWithCounts = await Promise.all(
-		Object.entries(mappings).map(async ([cardId, folderName]) => {
-			const songs = await getFolderSongs(folderName);
-			return {
-				cardId,
-				folderName,
-				songCount: songs.length
-			};
-		})
-	);
+		// Build mappings with song counts
+		const mappingsWithCounts = await Promise.all(
+			Object.entries(mappings).map(async ([cardId, folderName]) => {
+				const songs = await getFolderSongs(folderName);
+				return {
+					cardId,
+					folderName,
+					songCount: songs.length
+				};
+			})
+		);
 
-	return {
-		mappings: mappingsWithCounts,
-		folders,
-		settings
-	};
+		return {
+			mappings: mappingsWithCounts,
+			folders,
+			settings
+		};
+	} catch (error) {
+		console.error('Failed to load admin data:', error);
+		return {
+			mappings: [],
+			folders: [],
+			settings: {
+				maxVolume: DEFAULT_MAX_VOLUME,
+				currentVolume: DEFAULT_CURRENT_VOLUME,
+				isMuted: false
+			}
+		};
+	}
 };
 
 /**

@@ -13,10 +13,10 @@
 		"url": "https://github.com/dweigend/PiJukebox"
 	},
 	"scripts": {
-		"dev": "vite dev",
+		"dev": "BODY_SIZE_LIMIT=250M vite dev",
 		"build": "vite build",
 		"preview": "vite preview",
-		"start": "node build",
+		"start": "BODY_SIZE_LIMIT=250M node build",
 		"prepare": "svelte-kit sync || echo ''",
 		"postinstall": "bash setup.sh",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",

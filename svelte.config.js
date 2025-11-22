@@ -13,10 +13,15 @@ const config = {
 			out: 'build',
 			precompress: true
 		}),
-		// Disable CSRF origin check for local network access
+		// Allow CSRF requests from local network
 		// Safe because Pi is only accessible within home network
 		csrf: {
-			checkOrigin: false
+			trustedOrigins: [
+				'http://localhost:3000',
+				'http://raspberrypi.local:3000',
+				'http://raspi-rfid.local:3000',
+				'http://192.168.1.177:3000'
+			]
 		}
 	}
 };
