@@ -130,3 +130,16 @@ export async function saveMP3(
 	await writeFile(filePath, buffer);
 	return sanitizedFilename;
 }
+
+/**
+ * Sort songs by custom track order
+ * Songs not in order array are placed at the end (preserving original order)
+ */
+export function sortSongsByOrder(songs: Song[], order: string[]): Song[] {
+	const orderMap = new Map(order.map((filename, idx) => [filename, idx]));
+	return [...songs].sort((a, b) => {
+		const aIdx = orderMap.get(a.filename) ?? Infinity;
+		const bIdx = orderMap.get(b.filename) ?? Infinity;
+		return aIdx - bIdx;
+	});
+}

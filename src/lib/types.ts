@@ -15,6 +15,16 @@ export interface Card {
 }
 
 /**
+ * Card data stored in database (supports track ordering)
+ */
+export interface CardData {
+	/** Name of the music folder */
+	folderName: string;
+	/** Optional: Track filenames in desired playback order */
+	trackOrder?: string[];
+}
+
+/**
  * Music folder (album/playlist)
  */
 export interface Folder {
@@ -64,10 +74,11 @@ export interface Settings {
 
 /**
  * Database schema for lowdb
+ * Note: cards uses union type for backwards compatibility with old string entries
  */
 export interface DatabaseSchema {
-	/** Card ID to folder name mappings */
-	cards: Record<string, string>;
+	/** Card ID to folder/CardData mappings */
+	cards: Record<string, string | CardData>;
 	/** Player settings */
 	settings: Settings;
 }
