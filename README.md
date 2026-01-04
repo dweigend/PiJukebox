@@ -6,8 +6,7 @@ This project is an RFID-controlled music player for children, designed as a Toni
 
 ## Tech Stack
 
-- **SvelteKit** - Full-Stack Framework (SSR + API Routes)
-- **Svelte 5** - UI with `$state` runes
+- **SvelteKit + Svelte 5** - Full-Stack Framework (SSR + API Routes)
 - **Tailwind CSS + DaisyUI** - Styling
 - **howler.js** - Audio playback
 - **lowdb** - JSON database
@@ -16,7 +15,7 @@ This project is an RFID-controlled music player for children, designed as a Toni
 ## Features
 
 - RFID card-controlled music playback
-- USB keyboard controls (W/E/R + Arrow Keys + Space)
+- USB keyboard controls 
 - Volume control with max limit (child-safe)
 - Web admin interface for card management
 - Auto-play next song
