@@ -2,33 +2,19 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## Author
-
-**David Weigend**
-
-- Email: david.weigend@gmail.com
-- X: @weigend
-- Web: weigend.studio
-- GitHub: https://github.com/dweigend
-
----
-
 ## Project: PiJukebox
 
-**Toniebox-Alternative** - Raspberry Pi Music Player für Kinder
+**Toniebox-Alternative** - Raspberry Pi Music Player für Kinder (✅ Deployed & Running)
 
-**Goal:** RFID-Karten steuern Musikwiedergabe, USB-Controller (W/E/R) für Playback, Web-Admin für Card-Management.
+**Goal:** RFID-Karten steuern Musikwiedergabe, USB-Controller für Playback, Web-Admin für Card-Management.
 
 ### Tech Stack
 
-- **SvelteKit** (Full-Stack: SSR + API Routes)
-- **@sveltejs/adapter-node** (Production deployment - stable on Raspberry Pi)
-- **Svelte 5** (`$state` runes, NO stores in components)
+- **SvelteKit** + **@sveltejs/adapter-node** (Production on Raspberry Pi)
+- **Svelte 5** (`$state` runes, NO stores)
 - **Tailwind CSS + DaisyUI** (NO custom CSS)
-- **heroicons-svelte** (Cross-platform SVG icons)
 - **howler.js** (Audio), **lowdb** (JSON DB)
 - **Bun** (Package Manager - NEVER npm/pnpm)
-- **Node.js** (Production runtime via adapter-node)
 
 ---
 
@@ -37,67 +23,61 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ```
 src/
 ├── routes/
-│   ├── +page.svelte              # Player UI (minimalistisch)
+│   ├── +page.svelte              # Player UI
 │   ├── +page.server.ts           # Data loader
-│   └── admin/
-│       ├── +page.svelte          # Admin Interface
-│       └── +page.server.ts       # Form actions (Card-Mapping, Upload)
+│   ├── admin/                    # Admin Interface (5 sections)
+│   └── api/
+│       ├── cards/[cardId]/       # GET: Playlist lookup
+│       ├── volume/               # GET/POST: Volume settings
+│       └── settings/             # GET: Read-only settings
 ├── lib/
-│   ├── managers/                 # Client Manager Classes (.svelte.ts)
-│   │   ├── AudioManager.svelte.ts      # howler.js wrapper ($state)
-│   │   ├── RFIDManager.svelte.ts       # Keyboard handler (10 digits + ENTER)
-│   │   └── KeyboardManager.svelte.ts   # W/E/R key listener
-│   ├── server/                   # Server-only
-│   │   ├── database.ts           # lowdb CRUD (Card ↔ Folder)
+│   ├── managers/                 # Client Managers (.svelte.ts, $state)
+│   │   ├── AudioManager          # howler.js wrapper
+│   │   ├── RFIDManager           # 10-digit card input
+│   │   └── KeyboardManager       # Playback + Volume controls
+│   ├── server/
+│   │   ├── database.ts           # lowdb CRUD
 │   │   └── fileManager.ts        # Folder/MP3 ops
+│   ├── utils/formatters.ts       # Title formatting
+│   ├── constants.ts              # Magic values
 │   └── types.ts                  # Shared types
-music/                            # MP3 folders
-data/db.json                      # lowdb: {cardId: folderName}
+static/music/                     # MP3 folders (served directly)
+data/db.json                      # Card mappings + settings
 ```
 
 **Key Patterns:**
 
-- ✅ Manager classes export instances from `.svelte.ts` with `$state` runes
-- ✅ Server logic in `src/lib/server/` (import: `$lib/server/...`)
-- ✅ Client logic in `src/lib/managers/` (import: `$lib/managers/...`)
-- ❌ NO stores in components (use `$state` instead)
+- ✅ Manager classes use `$state` runes (NOT stores)
+- ✅ Server: `$lib/server/...` | Client: `$lib/managers/...`
+- ✅ Upload limit: **500MB** (`BODY_SIZE_LIMIT`)
 
 ---
 
 ## Commands
 
 ```bash
-bun install              # Install dependencies (NEVER npm/pnpm)
-bun run dev              # Dev server (http://localhost:5173)
+bun install              # Install deps (runs setup.sh automatically)
+bun run dev              # Dev server (localhost:5173)
+bun run build            # Production build
+bun run start            # Production server (PORT=3000, HOST=0.0.0.0)
 
-# Quality
-bun run format           # Auto-format (Prettier)
-bun run lint             # Prettier + ESLint
 bun run check            # TypeScript check
-
-# Testing
-bun run test:unit        # Vitest
-bun run test:e2e         # Playwright
-bun run test             # All tests
-
-# Build
-bun run build            # Production build (@sveltejs/adapter-node)
-bun run start            # Start production server (Node.js via bun)
+bun run lint             # Prettier + ESLint
+bun run format           # Auto-format
 ```
 
 ---
 
-## Workflow: ALWAYS use `/implement` Skill
+## Hardware Controls
 
-For **every** code implementation, use the `implement` skill:
-
-```
-PREPARE → CODE → VALIDATE → REFINE → COMMIT
-```
-
-**Why:** Ensures consistency, quality, browser validation, and proper git workflow.
-
-**Trigger:** Any feature implementation, bug fix, or code change.
+| Key | Action |
+|-----|--------|
+| **W** | Previous track |
+| **E** | Play/Pause |
+| **R** | Next track |
+| **Arrow Up/Down** | Volume ±5% |
+| **Space** | Mute/Unmute |
+| **RFID Card** | 10 digits → Load playlist |
 
 ---
 
@@ -176,25 +156,22 @@ mcp__perplexity__quick_search(query: "lowdb API reference")
 
 ---
 
-## Hardware Context (Raspberry Pi)
+## Raspberry Pi Deployment
 
-- **RFID Scanner:** USB keyboard (sends 10 digits + ENTER)
-- **CH57x Controller:** USB keyboard (W=Prev, E=Pause, R=Next)
-- **Browser:** Chromium Kiosk-Mode at boot
+**Status:** ✅ Deployed & Running
 
-**User Flow:**
+- **Service:** `pijukebox.service` (systemd, auto-start)
+- **Location:** `/opt/pijukebox`
+- **Access:** `http://raspberrypi.local:3000`
 
-1. RFID card → 10 digits + ENTER
-2. `RFIDManager` captures input → DB lookup
-3. `AudioManager` loads playlist from `/music/[folder]/`
-4. Auto-play
-5. Controller (W/E/R) controls playback
+**Deployment Guide:** See `docs/deployment/README.md`
 
-**Remote Access:**
-
-- **IP:** `http://192.168.1.XXX:3000` (find with `hostname -I` on Pi)
-- **mDNS:** `http://raspberrypi.local:3000` or `http://raspi-rfid.local:3000`
-- **Requirement:** Server must use `HOST=0.0.0.0` (already configured)
+**Update Pi:**
+```bash
+bun run build
+rsync -avz --exclude node_modules --exclude .git ./ pi@raspberrypi.local:/opt/pijukebox/
+ssh pi@raspberrypi.local "sudo systemctl restart pijukebox.service"
+```
 
 ---
 
@@ -207,31 +184,8 @@ mcp__perplexity__quick_search(query: "lowdb API reference")
 
 ---
 
-## Development Roadmap
+## Documentation
 
-**Central Planning Document:** `PLAN.md` (Living Document)
-
-**Current Phase:** Phase 0 - Setup & Dependencies
-
-### Phase Overview
-
-| Phase | Name                                | Status         |
-| ----- | ----------------------------------- | -------------- |
-| 0     | Setup & Dependencies                | 🔄 IN PROGRESS |
-| 1     | Foundation (Types, DB, FileManager) | ⏳ PENDING     |
-| 2     | Managers (Audio, RFID, Keyboard)    | ⏳ PENDING     |
-| 3     | UI (Player + Admin)                 | ⏳ PENDING     |
-| 4     | Testing & Polish                    | ⏳ PENDING     |
-| 5     | Deployment (Raspberry Pi)           | ⏳ PENDING     |
-
-**See `PLAN.md` for:**
-
-- Detailed task checklists for each phase
-- Human-in-the-loop points (UI feedback, testing)
-- Definition of Done for each phase
-- Git checkpoint guidelines
-- Deployment instructions (Phase 5)
-
-**Important:** Update `PLAN.md` after completing tasks (check off items, update status)
-
-**Also see:** `PROJECTPLAN.md` for detailed architecture and design decisions.
+- **Deployment:** `docs/deployment/README.md`
+- **Development History:** `dev/PLAN.md` (completed phases 0-5)
+- **Hardware:** `docs/hardware/`

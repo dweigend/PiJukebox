@@ -16,12 +16,13 @@ This project is an RFID-controlled music player for children, designed as a Toni
 ## Features
 
 - RFID card-controlled music playback
-- USB keyboard controls (W/E/R for prev/pause/next)
+- USB keyboard controls (W/E/R + Arrow Keys + Space)
+- Volume control with max limit (child-safe)
 - Web admin interface for card management
 - Auto-play next song
 - Folder-based playlists
 - Minimalist, kid-friendly UI
-- Multiple MP3 file upload
+- Multiple MP3 file upload (up to 500MB)
 - Clean, maintainable codebase
 
 ## Project Structure
@@ -135,6 +136,17 @@ http://raspberrypi.local:3000
 1. **RFID Scanner**: Connect USB RFID scanner (sends 10 digits + ENTER)
 2. **Controller**: Connect CH57x USB controller (W/E/R keys)
 3. **Audio**: Connect speakers/amplifier via 3.5mm jack or USB audio
+
+### Keyboard Controls
+
+| Key            | Action         |
+| -------------- | -------------- |
+| **W**          | Previous track |
+| **E**          | Play/Pause     |
+| **R**          | Next track     |
+| **Arrow Up**   | Volume +5%     |
+| **Arrow Down** | Volume -5%     |
+| **Space**      | Mute/Unmute    |
 
 ## License
 
