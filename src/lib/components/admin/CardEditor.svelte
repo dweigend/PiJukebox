@@ -304,7 +304,7 @@
 			{#if folderMode === 'select'}
 				<select bind:value={editFolderName} class="select-bordered select w-full select-sm">
 					<option value="" disabled>Select a folder</option>
-					{#each existingFolders as folder}
+					{#each existingFolders as folder (folder)}
 						<option value={folder}>{formatTitle(folder)}</option>
 					{/each}
 				</select>

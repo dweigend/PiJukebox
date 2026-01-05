@@ -32,20 +32,21 @@ export const load: PageServerLoad = async () => {
 		const folders = await getAllFolders();
 		const settings = await getSettings();
 
-		// Build mappings with song counts
-		const mappingsWithCounts = await Promise.all(
+		// Build mappings with songs (for CardEditor)
+		const mappingsWithSongs = await Promise.all(
 			Object.entries(mappings).map(async ([cardId, folderName]) => {
 				const songs = await getFolderSongs(folderName);
 				return {
 					cardId,
 					folderName,
-					songCount: songs.length
+					songCount: songs.length,
+					songs
 				};
 			})
 		);
 
 		return {
-			mappings: mappingsWithCounts,
+			mappings: mappingsWithSongs,
 			folders,
 			settings
 		};
