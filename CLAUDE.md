@@ -25,9 +25,12 @@ src/
 ├── routes/
 │   ├── +page.svelte              # Player UI
 │   ├── +page.server.ts           # Data loader
-│   ├── admin/                    # Admin Interface (5 sections)
+│   ├── admin/                    # Admin Interface
 │   └── api/
 │       ├── cards/[cardId]/       # GET: Playlist lookup
+│       ├── cards/[cardId]/order/ # POST: Save track order
+│       ├── folders/[name]/songs/ # GET: List songs, DELETE: Remove song
+│       ├── upload/               # POST: Upload MP3s with progress
 │       ├── volume/               # GET/POST: Volume settings
 │       └── settings/             # GET: Read-only settings
 ├── lib/
@@ -35,6 +38,10 @@ src/
 │   │   ├── AudioManager          # howler.js wrapper
 │   │   ├── RFIDManager           # 10-digit card input
 │   │   └── KeyboardManager       # Playback + Volume controls
+│   ├── components/admin/         # Admin UI Components
+│   │   ├── CardEditor.svelte     # Card create/edit form
+│   │   ├── TrackList.svelte      # Drag & drop song list
+│   │   └── UploadZone.svelte     # MP3 upload with progress
 │   ├── server/
 │   │   ├── database.ts           # lowdb CRUD
 │   │   └── fileManager.ts        # Folder/MP3 ops

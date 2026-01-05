@@ -21,8 +21,23 @@ This project is an RFID-controlled music player for children, designed as a Toni
 - Auto-play next song
 - Folder-based playlists
 - Minimalist, kid-friendly UI
-- Multiple MP3 file upload (up to 500MB)
+- Multiple MP3 file upload (up to 500MB) with progress
+- Drag & drop track ordering
 - Clean, maintainable codebase
+
+## Admin Interface
+
+The web admin interface (`/admin`) allows managing RFID card mappings:
+
+1. **Card Mappings Table** - View all cards with folder and song count
+2. **Card Editor** - Add/edit cards with:
+   - RFID Card ID input (10 digits)
+   - Folder selection or creation
+   - Drag & drop track ordering
+   - MP3 upload with progress bar
+3. **Settings** - Configure maximum volume limit
+
+**Workflow:** Scan card → Select/create folder → Upload MP3s → Reorder tracks → Save
 
 ## Project Structure
 
