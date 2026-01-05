@@ -121,6 +121,20 @@
 		}
 	}
 
+	/** Helper: Execute all save operations in sequence */
+	async function executeSaveOperations(): Promise<void> {
+		if (folderMode === 'new' && newFolderName) {
+			await createFolder(activeFolderName);
+		}
+		await assignCard(editCardId, activeFolderName);
+		if (editSongs.length > 0) {
+			await saveTrackOrder(
+				editCardId,
+				editSongs.map((s) => s.filename)
+			);
+		}
+	}
+
 	async function handleSave(): Promise<void> {
 		if (!canSave) return;
 
@@ -128,23 +142,7 @@
 		isSaving = true;
 
 		try {
-			// 1. Create folder if new
-			if (folderMode === 'new' && newFolderName) {
-				await createFolder(activeFolderName);
-			}
-
-			// 2. Assign card to folder
-			await assignCard(editCardId, activeFolderName);
-
-			// 3. Save track order if songs exist
-			if (editSongs.length > 0) {
-				await saveTrackOrder(
-					editCardId,
-					editSongs.map((s) => s.filename)
-				);
-			}
-
-			// Success!
+			await executeSaveOperations();
 			onSave();
 		} catch (err) {
 			error = err instanceof Error ? err.message : 'Failed to save card';

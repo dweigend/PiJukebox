@@ -20,64 +20,59 @@
 	function handleFileChange(event: Event) {
 		const input = event.target as HTMLInputElement;
 		if (!input.files || input.files.length === 0) return;
-
 		uploadFiles(input.files);
 	}
 
-	function uploadFiles(files: FileList) {
-		// Reset state
+	/** Helper: Build FormData for upload */
+	function buildUploadFormData(folder: string, files: FileList): FormData {
+		const formData = new FormData();
+		formData.append('folderName', folder);
+		for (const file of files) {
+			formData.append('files', file);
+		}
+		return formData;
+	}
+
+	/** Helper: Handle upload completion (success or error) */
+	function handleUploadComplete(xhr: XMLHttpRequest): void {
+		isUploading = false;
+		if (xhr.status >= 200 && xhr.status < 300) {
+			try {
+				success = JSON.parse(xhr.responseText).message;
+			} catch {
+				success = 'Upload complete';
+			}
+			progress = 100;
+			if (fileInput) fileInput.value = '';
+			onupload?.();
+		} else {
+			try {
+				error = JSON.parse(xhr.responseText).error || 'Upload failed';
+			} catch {
+				error = 'Upload failed';
+			}
+		}
+	}
+
+	function uploadFiles(files: FileList): void {
 		error = null;
 		success = null;
 		progress = 0;
 		isUploading = true;
 
-		const formData = new FormData();
-		formData.append('folderName', folderName);
-		for (const file of files) {
-			formData.append('files', file);
-		}
-
 		const xhr = new XMLHttpRequest();
 
-		// Progress event
 		xhr.upload.addEventListener('progress', (e) => {
-			if (e.lengthComputable) {
-				progress = Math.round((e.loaded / e.total) * 100);
-			}
+			if (e.lengthComputable) progress = Math.round((e.loaded / e.total) * 100);
 		});
-
-		// Complete event
-		xhr.addEventListener('load', () => {
-			isUploading = false;
-
-			if (xhr.status >= 200 && xhr.status < 300) {
-				const response = JSON.parse(xhr.responseText);
-				success = response.message;
-				progress = 100;
-
-				// Reset file input
-				if (fileInput) fileInput.value = '';
-
-				// Notify parent
-				onupload?.();
-			} else {
-				try {
-					const response = JSON.parse(xhr.responseText);
-					error = response.error || 'Upload failed';
-				} catch {
-					error = 'Upload failed';
-				}
-			}
-		});
-
-		// Error event
+		xhr.addEventListener('load', () => handleUploadComplete(xhr));
 		xhr.addEventListener('error', () => {
 			isUploading = false;
 			error = 'Network error during upload';
 		});
 
 		xhr.open('POST', '/api/upload');
-		xhr.send(formData);
+		xhr.send(buildUploadFormData(folderName, files));
 	}
 </script>
 

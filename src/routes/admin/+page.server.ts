@@ -23,44 +23,44 @@ import {
 import { getAllFolders, getFolderSongs, createFolder, folderExists } from '$lib/server/fileManager';
 import { sanitizeFolderName } from '$lib/utils/formatters';
 
-/**
- * Load all card mappings, available folders, and settings
- */
+/** Helper: Enrich a single card mapping with songs */
+async function enrichMappingWithSongs(cardId: string, folderName: string) {
+	const songs = await getFolderSongs(folderName);
+	return { cardId, folderName, songCount: songs.length, songs };
+}
+
+/** Helper: Default response on error */
+function getDefaultAdminData() {
+	return {
+		mappings: [],
+		folders: [],
+		settings: {
+			maxVolume: DEFAULT_MAX_VOLUME,
+			currentVolume: DEFAULT_CURRENT_VOLUME,
+			isMuted: false
+		}
+	};
+}
+
+/** Load all card mappings, available folders, and settings */
 export const load: PageServerLoad = async () => {
 	try {
-		const mappings = await getAllMappings();
-		const folders = await getAllFolders();
-		const settings = await getSettings();
+		const [mappings, folders, settings] = await Promise.all([
+			getAllMappings(),
+			getAllFolders(),
+			getSettings()
+		]);
 
-		// Build mappings with songs (for CardEditor)
 		const mappingsWithSongs = await Promise.all(
-			Object.entries(mappings).map(async ([cardId, folderName]) => {
-				const songs = await getFolderSongs(folderName);
-				return {
-					cardId,
-					folderName,
-					songCount: songs.length,
-					songs
-				};
-			})
+			Object.entries(mappings).map(([cardId, folderName]) =>
+				enrichMappingWithSongs(cardId, folderName)
+			)
 		);
 
-		return {
-			mappings: mappingsWithSongs,
-			folders,
-			settings
-		};
+		return { mappings: mappingsWithSongs, folders, settings };
 	} catch (error) {
 		console.error('Failed to load admin data:', error);
-		return {
-			mappings: [],
-			folders: [],
-			settings: {
-				maxVolume: DEFAULT_MAX_VOLUME,
-				currentVolume: DEFAULT_CURRENT_VOLUME,
-				isMuted: false
-			}
-		};
+		return getDefaultAdminData();
 	}
 };
 
