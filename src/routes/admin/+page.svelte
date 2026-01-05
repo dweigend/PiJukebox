@@ -1,7 +1,9 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import { invalidateAll } from '$app/navigation';
 	import { formatTitle } from '$lib/utils/formatters';
 	import { MIN_VOLUME, MAX_VOLUME } from '$lib/constants';
+	import UploadZone from '$lib/components/admin/UploadZone.svelte';
 	import type { PageData, ActionData } from './$types';
 
 	let { data, form }: { data: PageData; form: ActionData } = $props();
@@ -14,6 +16,9 @@
 	// Volume Slider State (reactive for live preview)
 	// Note: Must use $state (not $derived) because we need two-way binding with bind:value
 	let maxVolumeSlider = $state(data.settings.maxVolume);
+
+	// Upload folder selection
+	let uploadFolder = $state('');
 
 	// Auto-lookup at 10 digits
 	$effect(() => {
@@ -255,17 +260,15 @@
 		<div class="card-body p-4">
 			<h2 class="card-title text-lg">Upload MP3s to Folder</h2>
 
-			<form
-				method="POST"
-				action="?/uploadMP3"
-				enctype="multipart/form-data"
-				use:enhance
-				class="space-y-3"
-			>
+			<div class="space-y-3">
 				<fieldset class="fieldset">
 					<legend class="fieldset-legend text-sm">Target Folder</legend>
-					<select name="folderName" class="select-bordered select w-full select-sm" required>
-						<option disabled selected>Select a folder</option>
+					<select
+						bind:value={uploadFolder}
+						class="select-bordered select w-full select-sm"
+						required
+					>
+						<option value="" disabled>Select a folder</option>
 						{#each data.folders as folder (folder)}
 							<option value={folder}>{formatTitle(folder)}</option>
 						{/each}
@@ -275,25 +278,12 @@
 					</label>
 				</fieldset>
 
-				<fieldset class="fieldset">
-					<legend class="fieldset-legend text-sm">MP3 Files</legend>
-					<input
-						type="file"
-						name="mp3File"
-						accept=".mp3,audio/mpeg"
-						class="file-input-bordered file-input w-full file-input-sm"
-						multiple
-						required
-					/>
-					<label class="label">
-						<span class="label-text-alt">Select one or more MP3 files (max 10MB each)</span>
-					</label>
-				</fieldset>
-
-				<div class="card-actions justify-end">
-					<button type="submit" class="btn btn-sm btn-accent">Upload MP3s</button>
-				</div>
-			</form>
+				{#if uploadFolder}
+					<UploadZone folderName={uploadFolder} onupload={() => invalidateAll()} />
+				{:else}
+					<p class="text-sm text-base-content/60">Select a folder to enable upload</p>
+				{/if}
+			</div>
 		</div>
 	</div>
 

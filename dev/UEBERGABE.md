@@ -2,81 +2,108 @@
 
 ## Aktueller Stand
 **Datum:** 2026-01-04
-**Phase:** Planung abgeschlossen
-**Naechste Session:** Session 1 - Database & Track Order Backend
+**Phase:** Session 2 abgeschlossen ✅
+**Naechste Session:** Session 3 - Drag & Drop Track-Sortierung
 
 ---
 
-## Kontext
+## Was wurde gemacht (Session 2)
 
-Das Admin Panel wird von einem fragmentierten Workflow zu einem card-zentrierten Workflow umgebaut. Der Plan ist in 6 Sessions aufgeteilt, die jeweils ein Feature vollstaendig implementieren.
+### Upload mit Progress Refactor ✅
 
-### Problem
-- Track-Reihenfolge ist zufaellig (Filesystem-Reihenfolge)
-- Kein Upload-Fortschritt sichtbar
-- Workflow ist umstaendlich: Ordner -> Upload -> Karte (3 separate Schritte)
+1. **Neuer API Endpoint** (`src/routes/api/upload/+server.ts`):
+   - POST: multipart/form-data mit `folderName` und `files`
+   - Validiert Dateityp (.mp3) und Groesse (max 500MB)
+   - Nutzt bestehende `saveMP3()` und `folderExists()`
+   - JSON Response: `{ success, uploaded, message }` oder `{ error }`
 
-### Loesung
-- Track-Reihenfolge in Datenbank speichern
-- Upload mit Progress Bar
-- Neuer Workflow: Karte -> Folder -> Upload -> Sortieren
+2. **UploadZone Komponente** (`src/lib/components/admin/UploadZone.svelte`):
+   - Props: `folderName`, `onupload` Callback
+   - DaisyUI `file-input` + `progress` Bar
+   - XMLHttpRequest fuer Progress-Events
+   - Success/Error Alerts
+   - Disabled state waehrend Upload
+
+3. **Alte Form Action entfernt** (Refactor):
+   - `uploadMP3` Action aus `+page.server.ts` geloescht
+   - Upload-Formular in `+page.svelte` durch UploadZone ersetzt
+   - Keine Duplikation mehr - ein Upload-Weg statt zwei
+
+### Tests ✅
+- Upload mit kleiner Datei funktioniert
+- Progress-Anzeige funktioniert
+- Success-Message erscheint
+- `invalidateAll()` aktualisiert Song-Count
+- File Input wird nach Upload zurueckgesetzt
+
+---
+
+## Session 1 (Abgeschlossen)
+
+### Database & Track Order Backend ✅
+- `CardData` Interface mit `folderName` und `trackOrder?`
+- `getCardData()`, `setCardData()`, `setTrackOrder()` Funktionen
+- `sortSongsByOrder()` Helper
+- POST `/api/cards/[cardId]/order` Endpoint
+- GET `/api/cards/[cardId]` wendet trackOrder an
+
+---
+
+## Naechste Session (Session 3)
+
+### Ziel
+Drag & Drop Track-Sortierung implementieren.
+
+### Tasks
+1. `bun add svelte-dnd-action` - Dependency installieren
+2. `src/lib/components/admin/TrackList.svelte` - Komponente mit DnD
+3. `src/lib/server/fileManager.ts` - `deleteSong()` implementieren
+4. DELETE Endpoint fuer Songs
+5. Chrome DevTools Tests
+
+### Commit am Ende
+```bash
+git commit -m "feat: ✨ add drag-drop track reordering"
+```
 
 ---
 
 ## Wichtige Dateien
 
-### Planung
-- `dev/ROADMAP.md` - Alle 6 Sessions mit Tasks
-- `/Users/davidweigend/.claude/plans/warm-wishing-starlight.md` - Detaillierter Plan
+### Session 2 (Neu)
+- `src/routes/api/upload/+server.ts` - Upload API Endpoint
+- `src/lib/components/admin/UploadZone.svelte` - Upload Komponente
 
-### Bestehender Code (relevant fuer Session 1)
-- `src/lib/types.ts` - Hier kommt `CardData` Interface
-- `src/lib/server/database.ts` - Hier kommen neue Funktionen
-- `src/routes/api/cards/[cardId]/+server.ts` - Hier wird Track Order angewendet
+### Session 2 (Geaendert)
+- `src/routes/admin/+page.server.ts` - uploadMP3 Action entfernt
+- `src/routes/admin/+page.svelte` - UploadZone integriert
+
+### Session 1
+- `src/lib/types.ts` - CardData Interface
+- `src/lib/server/database.ts` - 3 neue Funktionen
+- `src/lib/server/fileManager.ts` - sortSongsByOrder
+- `src/routes/api/cards/[cardId]/+server.ts`
+- `src/routes/api/cards/[cardId]/order/+server.ts`
 
 ---
 
-## Session 1 Aufgaben
+## Komponenten Uebersicht
 
-### Ziel
-Backend-Grundlage fuer Track-Reihenfolge schaffen.
-
-### Was zu tun ist
-1. **Types erweitern**: `CardData` Interface in `src/lib/types.ts`
-2. **Database erweitern**: Drei neue Funktionen in `src/lib/server/database.ts`
-3. **Neuer Endpoint**: `src/routes/api/cards/[cardId]/order/+server.ts`
-4. **Bestehenden Endpoint anpassen**: Track Order in Response anwenden
-
-### Technische Details
-```typescript
-// Neues Interface
-interface CardData {
-  folderName: string;
-  trackOrder?: string[];  // Optional fuer Backwards Compat
-}
-
-// Neue Funktionen
-getCardData(cardId: string): Promise<CardData | null>
-setCardData(cardId: string, data: CardData): Promise<void>
-setTrackOrder(cardId: string, order: string[]): Promise<void>
+```
+src/lib/components/admin/
+└── UploadZone.svelte     # Session 2 ✅
 ```
 
-### Commit am Ende
-```bash
-git commit -m "feat: add track order support to database"
+Geplant fuer Session 3+:
+```
+src/lib/components/admin/
+├── UploadZone.svelte     # ✅
+├── TrackList.svelte      # Session 3
+└── CardEditor.svelte     # Session 4
 ```
 
 ---
 
 ## Git Status
 - Branch: main
-- Letzter Commit: `b37a9f8 docs: update CLAUDE.md and README.md`
-- Checkpoint erstellt: `checkpoint: vor admin-redesign`
-
----
-
-## Notizen
-- DaisyUI verwenden, kein Custom CSS
-- Funktionen max 20 Zeilen
-- svelte-dnd-action wird in Session 3 installiert
-- Rueckwaertskompatibilitaet beachten (alte Card-Eintraege normalisieren)
+- Letzter Commit: Session 1 Track Order (`7573d06`)

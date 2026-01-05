@@ -33,14 +33,14 @@ Das aktuelle Datenmodell speichert Cards als einfaches Mapping: `cards: Record<s
    - Fallback: Wenn kein trackOrder existiert, wird Filesystem-Reihenfolge verwendet
 
 ### Tasks
-- [ ] `src/lib/types.ts` - `CardData` Interface hinzufuegen
-- [ ] `src/lib/server/database.ts` - `getCardData()` implementieren
-- [ ] `src/lib/server/database.ts` - `setCardData()` implementieren
-- [ ] `src/lib/server/database.ts` - `setTrackOrder()` implementieren
-- [ ] `src/routes/api/cards/[cardId]/order/+server.ts` - POST Endpoint erstellen
-- [ ] `src/routes/api/cards/[cardId]/+server.ts` - Track Order anwenden
-- [ ] `bun run check` - TypeScript pruefen
-- [ ] Manuell testen: API-Calls mit curl oder Browser
+- [x] `src/lib/types.ts` - `CardData` Interface hinzufuegen
+- [x] `src/lib/server/database.ts` - `getCardData()` implementieren
+- [x] `src/lib/server/database.ts` - `setCardData()` implementieren
+- [x] `src/lib/server/database.ts` - `setTrackOrder()` implementieren
+- [x] `src/routes/api/cards/[cardId]/order/+server.ts` - POST Endpoint erstellen
+- [x] `src/routes/api/cards/[cardId]/+server.ts` - Track Order anwenden
+- [x] `bun run check` - TypeScript pruefen
+- [x] Manuell testen: API-Calls mit curl oder Browser
 
 ### Commit
 ```bash

@@ -311,7 +311,7 @@ Card-zentrierter Workflow: Karte -> Folder -> Upload -> Sortieren
 
 | Session | Feature | Status |
 |---------|---------|--------|
-| 1 | Database & Track Order Backend | [ ] Pending |
+| 1 | Database & Track Order Backend | ✅ Done |
 | 2 | Upload mit Progress | [ ] Pending |
 | 3 | Drag & Drop Track-Sortierung | [ ] Pending |
 | 4 | Card Editor Komponente | [ ] Pending |

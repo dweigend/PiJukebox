@@ -8,7 +8,6 @@ import type { Actions, PageServerLoad } from './$types';
 import {
 	CARD_ID_LENGTH,
 	CARD_ID_PATTERN,
-	UPLOAD_MAX_SIZE_BYTES,
 	MIN_VOLUME,
 	MAX_VOLUME,
 	DEFAULT_MAX_VOLUME,
@@ -21,13 +20,7 @@ import {
 	getSettings,
 	updateSettings
 } from '$lib/server/database';
-import {
-	getAllFolders,
-	getFolderSongs,
-	createFolder,
-	saveMP3,
-	folderExists
-} from '$lib/server/fileManager';
+import { getAllFolders, getFolderSongs, createFolder, folderExists } from '$lib/server/fileManager';
 import { sanitizeFolderName } from '$lib/utils/formatters';
 
 /**
@@ -156,57 +149,6 @@ export const actions: Actions = {
 				inputFolderName === sanitizedFolderName
 					? `Folder "${sanitizedFolderName}" created successfully`
 					: `Folder created as "${sanitizedFolderName}" (sanitized from "${inputFolderName}")`
-		};
-	},
-
-	/**
-	 * Upload MP3(s) to folder
-	 */
-	uploadMP3: async ({ request }) => {
-		const formData = await request.formData();
-		const folderName = formData.get('folderName')?.toString();
-		const files = formData.getAll('mp3File') as File[];
-
-		// Validation
-		if (!folderName) {
-			return fail(400, { error: 'Folder name is required' });
-		}
-
-		if (!files || files.length === 0 || files[0].size === 0) {
-			return fail(400, { error: 'At least one MP3 file is required' });
-		}
-
-		// Check if folder exists
-		const exists = await folderExists(folderName);
-		if (!exists) {
-			return fail(400, { error: 'Selected folder does not exist' });
-		}
-
-		// Validate and upload each file
-		const uploadedFiles: string[] = [];
-		for (const file of files) {
-			// Check file type
-			if (!file.name.toLowerCase().endsWith('.mp3')) {
-				return fail(400, { error: `File "${file.name}" is not an MP3 file` });
-			}
-
-			// Check file size
-			if (file.size > UPLOAD_MAX_SIZE_BYTES) {
-				return fail(400, { error: `File "${file.name}" exceeds 500MB limit` });
-			}
-
-			// Save MP3 (filename will be sanitized automatically)
-			const buffer = Buffer.from(await file.arrayBuffer());
-			const savedFilename = await saveMP3(folderName, file.name, buffer);
-			uploadedFiles.push(savedFilename);
-		}
-
-		return {
-			success: true,
-			message:
-				uploadedFiles.length === 1
-					? `File "${uploadedFiles[0]}" uploaded to ${folderName}`
-					: `${uploadedFiles.length} files uploaded to ${folderName}`
 		};
 	},
 
