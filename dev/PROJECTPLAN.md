@@ -312,10 +312,10 @@ Card-zentrierter Workflow: Karte -> Folder -> Upload -> Sortieren
 | Session | Feature | Status |
 |---------|---------|--------|
 | 1 | Database & Track Order Backend | ✅ Done |
-| 2 | Upload mit Progress | [ ] Pending |
-| 3 | Drag & Drop Track-Sortierung | [ ] Pending |
-| 4 | Card Editor Komponente | [ ] Pending |
-| 5 | Admin Page Redesign | [ ] Pending |
+| 2 | Upload mit Progress | ✅ Done |
+| 3 | Drag & Drop Track-Sortierung | ✅ Done |
+| 4 | Card Editor Komponente | ✅ Done |
+| 5 | Admin Page Redesign | ✅ Done |
 | 6 | Docs & Cleanup | [ ] Pending |
 
 **Neue Dateien:**

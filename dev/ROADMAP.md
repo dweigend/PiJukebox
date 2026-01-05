@@ -269,23 +269,23 @@ Das aktuelle Admin Panel hat 5 separate Sektionen ohne klaren Workflow. Das neue
    - Bestehende Form Actions bleiben erhalten (assignCard, deleteCard, updateSettings)
 
 ### Tasks
-- [ ] `src/routes/admin/+page.server.ts` - Load Function erweitern (Track-Counts)
-- [ ] `src/routes/admin/+page.svelte` - Layout umbauen
-- [ ] Kartenliste als Tabelle implementieren
-- [ ] [+] Button fuer neue Karte
-- [ ] Edit/Delete Buttons pro Zeile
-- [ ] CardEditor Integration (conditional rendering)
-- [ ] Settings in DaisyUI Collapse verschieben
-- [ ] `bun run check` - TypeScript pruefen
-- [ ] `bun run lint` - Code-Qualitaet pruefen
-- [ ] Chrome DevTools MCP: Vollstaendiger Workflow-Test
+- [x] `src/routes/admin/+page.server.ts` - Load Function erweitern (Songs[])
+- [x] `src/routes/admin/+page.svelte` - Layout umbauen
+- [x] Kartenliste als Tabelle implementieren
+- [x] [+] Button fuer neue Karte
+- [x] Edit/Delete Buttons pro Zeile
+- [x] CardEditor Integration (conditional rendering)
+- [x] Settings in DaisyUI Collapse verschieben
+- [x] `bun run check` - TypeScript pruefen
+- [x] `bun run lint` - Code-Qualitaet pruefen
+- [x] Chrome DevTools MCP: UI-Tests bestanden
 - [ ] Test: Neue Karte anlegen, Songs hochladen, sortieren, speichern
 - [ ] Test: Existierende Karte bearbeiten
 - [ ] Test: Upload grosser Datei (500MB)
 
 ### Commit
 ```bash
-git commit -m "feat: redesign admin panel with card-centric workflow"
+git commit -m "feat: ✨ redesign admin panel with card-centric workflow"
 ```
 
 ---

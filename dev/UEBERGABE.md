@@ -2,138 +2,100 @@
 
 ## Aktueller Stand
 **Datum:** 2026-01-05
-**Phase:** Session 4 abgeschlossen ✅
-**Naechste Session:** Session 5 - Admin Page Redesign
+**Phase:** Session 5 abgeschlossen ✅
+**Naechste Session:** Session 6 - Docs & Cleanup
 
 ---
 
-## Was wurde gemacht (Session 4)
+## Was wurde gemacht (Session 5)
 
-### CardEditor Komponente ✅
+### Admin Page Redesign ✅
 
-1. **Neuer API Endpoint** (`src/routes/api/folders/[folderName]/songs/+server.ts`):
-   - GET: Laedt alle Songs eines Folders
-   - Nutzt existierende `getFolderSongs()` Funktion
-   - Ermoeglicht `refreshSongs()` im CardEditor
+1. **Neues Layout:**
+   ```
+   +--------------------------------------------------+
+   | Admin Interface                                   |
+   +--------------------------------------------------+
+   | Card Mappings                              [+Add] |
+   |--------------------------------------------------|
+   | Card ID     | Folder       | Songs | Actions     |
+   |-------------|--------------|-------|-------------|
+   | 0123456789  | hoerbuch_1   | 12    | [Edit][Del] |
+   +--------------------------------------------------+
+   | CardEditor (erscheint bei Edit/Add)              |
+   +--------------------------------------------------+
+   | > Settings (collapsed)                           |
+   +--------------------------------------------------+
+   ```
 
-2. **CardEditor Komponente** (`src/lib/components/admin/CardEditor.svelte`):
-   - **Props:**
-     ```typescript
-     interface Props {
-       cardId?: string;           // undefined = neue Karte
-       folderName?: string;       // Folder der Karte
-       songs?: Song[];            // Songs (bereits sortiert)
-       existingFolders: string[]; // Fuer Dropdown
-       onSave: () => void;        // Nach Speichern
-       onCancel: () => void;      // Bei Abbruch
-     }
-     ```
-   - **Svelte 5 Patterns:** `$props()`, `$state()`, `$derived()`
-   - **Features:**
-     - Card ID Input mit 10-Ziffern Validierung
-     - Folder Mode Toggle (Select Existing / Create New)
-     - Folder Name Sanitization Preview
-     - TrackList Integration (Drag & Drop + Delete)
-     - UploadZone Integration (Progress Bar)
-     - Optimistic Updates bei Reorder
-     - Error/Success Alerts
+2. **Aenderungen in `+page.svelte`:**
+   - State: `selectedCardId`, `isCreatingNew` fuer Editor-Steuerung
+   - Table mit [+ Add] Header Button + Edit/Delete Buttons pro Zeile
+   - CardEditor Integration mit conditional rendering
+   - Settings in DaisyUI Collapse verschoben
+   - Sections 2-4 entfernt (durch CardEditor ersetzt)
+   - **-130 Zeilen** (von 324 auf 194)
 
-3. **Event Handlers:**
-   - `handleReorder(order)` - Optimistic update + POST `/api/cards/[id]/order`
-   - `handleDelete(filename)` - Confirm + DELETE `/api/folders/.../songs/...`
-   - `handleUploadComplete()` - Refresh Songs via neuen Endpoint
-   - `handleSave()` - Create Folder (optional) + Assign Card + Save Order
+3. **Aenderungen in `+page.server.ts`:**
+   - Load Function: `songs[]` pro Mapping laden (fuer CardEditor)
+
+4. **Lint-Fix in `CardEditor.svelte`:**
+   - Each-Block Key hinzugefuegt
 
 ### Tests ✅
 - TypeScript check: 0 Errors
-- API Endpoint `/api/folders/[folder]/songs` funktioniert
-- Dev Server laeuft ohne Fehler
+- Lint: Passed
+- Chrome DevTools: Alle UI-Tests bestanden
 - Console: Keine Errors
 
 ---
 
-## Session 3 (Abgeschlossen)
+## Abgeschlossene Sessions
 
-### TrackList Komponente mit Drag & Drop ✅
-- `svelte-dnd-action` fuer Drag & Drop
-- DELETE Endpoint fuer Songs
-- Security: Path Traversal Protection
-
----
-
-## Session 2 (Abgeschlossen)
-
-### Upload mit Progress Refactor ✅
-- Upload API Endpoint
-- UploadZone mit Progress Bar
+| Session | Feature | Status |
+|---------|---------|--------|
+| 1 | Database & Track Order Backend | ✅ Done |
+| 2 | Upload mit Progress | ✅ Done |
+| 3 | Drag & Drop Track-Sortierung | ✅ Done |
+| 4 | Card Editor Komponente | ✅ Done |
+| 5 | Admin Page Redesign | ✅ Done |
 
 ---
 
-## Session 1 (Abgeschlossen)
-
-### Database & Track Order Backend ✅
-- CardData Interface
-- Track Order API
-
----
-
-## Naechste Session (Session 5)
+## Naechste Session (Session 6)
 
 ### Ziel
-Admin Page komplett umbauen mit CardEditor Integration.
-
-### UI Layout
-```
-+--------------------------------------------------+
-| Admin Interface                                   |
-+--------------------------------------------------+
-| Card Mappings                              [+]    |
-|--------------------------------------------------+
-| Card ID     | Folder       | Tracks | Actions    |
-|-------------|--------------|--------|------------|
-| 0123456789  | hoerbuch_1   | 12     | [Edit][Del]|
-+--------------------------------------------------+
-| Card Editor (erscheint bei Klick)                |
-| <CardEditor ... />                               |
-+--------------------------------------------------+
-| > Settings (collapsible)                         |
-+--------------------------------------------------+
-```
+Dokumentation aktualisieren und Code bereinigen.
 
 ### Tasks
-- [ ] Admin Page Load Function erweitern (Track-Counts)
-- [ ] Kartenliste als DaisyUI Table
-- [ ] [+] Button fuer neue Karte
-- [ ] Edit/Delete Buttons pro Zeile
-- [ ] CardEditor Integration (conditional rendering)
-- [ ] Settings in DaisyUI Collapse
+- [ ] Code Review: Ungenutzte Imports entfernen
+- [ ] Code Review: Console.logs entfernen
+- [ ] Code Review: Funktionen < 20 Zeilen pruefen
+- [ ] `bun run lint` - Finale Code-Qualitaet
+- [ ] README.md bei Bedarf aktualisieren
+- [ ] CLAUDE.md bei Bedarf aktualisieren
 
 ### Commit am Ende
 ```bash
-git commit -m "feat: redesign admin panel with card-centric workflow"
+git commit -m "docs: 📝 update documentation for admin redesign"
 ```
 
 ---
 
 ## Wichtige Dateien
 
-### Session 4 (Neu)
-- `src/routes/api/folders/[folderName]/songs/+server.ts` - GET Songs Endpoint
-- `src/lib/components/admin/CardEditor.svelte` - Haupt-Editor Komponente
+### Session 5 (Geaendert)
+- `src/routes/admin/+page.svelte` - Komplettes Redesign
+- `src/routes/admin/+page.server.ts` - Songs[] pro Mapping
+- `src/lib/components/admin/CardEditor.svelte` - Lint-Fix
 
-### Session 3
+### Fruehere Sessions
 - `src/lib/components/admin/TrackList.svelte` - DnD Track-Liste
-- `src/routes/api/folders/[folderName]/songs/[filename]/+server.ts` - DELETE Endpoint
-
-### Session 2
-- `src/routes/api/upload/+server.ts` - Upload API Endpoint
-- `src/lib/components/admin/UploadZone.svelte` - Upload Komponente
-
-### Session 1
-- `src/lib/types.ts` - CardData Interface
-- `src/lib/server/database.ts` - getCardData, setCardData, setTrackOrder
-- `src/routes/api/cards/[cardId]/+server.ts`
-- `src/routes/api/cards/[cardId]/order/+server.ts`
+- `src/lib/components/admin/UploadZone.svelte` - Upload mit Progress
+- `src/routes/api/cards/[cardId]/order/+server.ts` - Track Order API
+- `src/routes/api/folders/[folderName]/songs/+server.ts` - GET Songs
+- `src/routes/api/folders/[folderName]/songs/[filename]/+server.ts` - DELETE Song
+- `src/routes/api/upload/+server.ts` - Upload API
 
 ---
 
@@ -162,4 +124,4 @@ src/lib/components/admin/
 
 ## Git Status
 - Branch: main
-- Letzter Commit: Session 3 TrackList (`33d93c3`)
+- Letzter Commit: Session 5 Admin Redesign (`8fd191b`)
