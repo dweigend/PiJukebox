@@ -207,15 +207,16 @@ CardEditor
      - Cancel: Verwirft Aenderungen, ruft `onCancel` auf
 
 ### Tasks
-- [ ] `src/lib/components/admin/CardEditor.svelte` - Komponente implementieren
-- [ ] Card ID Input mit 10-Ziffern Validierung
-- [ ] Folder Name Input (bestehend auswaehlen oder neu eingeben)
-- [ ] TrackList Integration fuer Sortierung
-- [ ] UploadZone Integration fuer neue Uploads
-- [ ] Save/Cancel Buttons mit API-Calls
-- [ ] `bun run check` - TypeScript pruefen
-- [ ] Chrome DevTools MCP: Neuen Card erstellen testen
-- [ ] Chrome DevTools MCP: Existierende Card bearbeiten testen
+- [x] `src/lib/components/admin/CardEditor.svelte` - Komponente implementieren
+- [x] Card ID Input mit 10-Ziffern Validierung
+- [x] Folder Name Input (bestehend auswaehlen oder neu eingeben)
+- [x] TrackList Integration fuer Sortierung
+- [x] UploadZone Integration fuer neue Uploads
+- [x] Save/Cancel Buttons mit API-Calls
+- [x] `bun run check` - TypeScript pruefen
+- [x] GET `/api/folders/[folderName]/songs` Endpoint fuer refreshSongs()
+- [ ] Chrome DevTools MCP: Neuen Card erstellen testen (Session 5)
+- [ ] Chrome DevTools MCP: Existierende Card bearbeiten testen (Session 5)
 
 ### Commit
 ```bash
