@@ -61,6 +61,7 @@
 		"@types/howler": "^2.2.12",
 		"heroicons-svelte": "^2.0.2",
 		"howler": "^2.2.4",
-		"lowdb": "^7.0.1"
+		"lowdb": "^7.0.1",
+		"svelte-dnd-action": "^0.9.69"
 	}
 }

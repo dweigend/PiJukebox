@@ -1,40 +1,70 @@
 # Uebergabe - Admin Panel Redesign
 
 ## Aktueller Stand
-**Datum:** 2026-01-04
-**Phase:** Session 2 abgeschlossen ✅
-**Naechste Session:** Session 3 - Drag & Drop Track-Sortierung
+**Datum:** 2026-01-05
+**Phase:** Session 3 abgeschlossen ✅
+**Naechste Session:** Session 4 - Card Editor Komponente
 
 ---
 
-## Was wurde gemacht (Session 2)
+## Was wurde gemacht (Session 3)
 
-### Upload mit Progress Refactor ✅
+### TrackList Komponente mit Drag & Drop ✅
 
-1. **Neuer API Endpoint** (`src/routes/api/upload/+server.ts`):
-   - POST: multipart/form-data mit `folderName` und `files`
-   - Validiert Dateityp (.mp3) und Groesse (max 500MB)
-   - Nutzt bestehende `saveMP3()` und `folderExists()`
-   - JSON Response: `{ success, uploaded, message }` oder `{ error }`
+1. **Dependency installiert**:
+   ```bash
+   bun add svelte-dnd-action@0.9.69
+   ```
 
-2. **UploadZone Komponente** (`src/lib/components/admin/UploadZone.svelte`):
-   - Props: `folderName`, `onupload` Callback
-   - DaisyUI `file-input` + `progress` Bar
-   - XMLHttpRequest fuer Progress-Events
-   - Success/Error Alerts
-   - Disabled state waehrend Upload
+2. **TrackList Komponente** (`src/lib/components/admin/TrackList.svelte`):
+   - Props: `songs: Song[]`, `onreorder?: (order: string[]) => void`, `ondelete?: (filename: string) => void`
+   - Svelte 5 Pattern: `$props()`, `$state()`, `$effect()`
+   - `svelte-dnd-action` mit `use:dndzone` + `animate:flip`
+   - DaisyUI `menu` Styling mit Drag Handle, Track Number, Title, Delete Button
 
-3. **Alte Form Action entfernt** (Refactor):
-   - `uploadMP3` Action aus `+page.server.ts` geloescht
-   - Upload-Formular in `+page.svelte` durch UploadZone ersetzt
-   - Keine Duplikation mehr - ein Upload-Weg statt zwei
+3. **deleteSong() Funktion** (`src/lib/server/fileManager.ts`):
+   - Loescht MP3 aus Ordner via `unlink()`
+   - Validiert Folder-Existenz
+
+4. **DELETE Endpoint** (`src/routes/api/folders/[folderName]/songs/[filename]/+server.ts`):
+   - DELETE: Loescht Song + bereinigt trackOrder in allen betroffenen Cards
+   - `cleanupTrackOrders()` Helper entfernt geloeschte Filenames aus DB
+
+5. **ROADMAP.md aktualisiert**:
+   - Session 2+3 Tasks als erledigt markiert
+   - Integration Notes fuer Session 4/5 hinzugefuegt (API-Aufrufe, State Flow)
+
+### Security Review & Refactor ✅
+
+Nach Code-Review wurden folgende Security-Issues gefixt:
+
+1. **Path Traversal Fix** (`deleteSong()`):
+   - `basename()` sanitiert Inputs
+   - `resolve()` + Path-Validierung verhindert Ausbruch aus MUSIC_DIR
+   - MP3-Extension wird validiert
+
+2. **DELETE Endpoint Defense in Depth**:
+   - Fruehe Validierung von filename (MP3, keine `..`, `/`, `\`)
+   - Doppelte Absicherung (Endpoint + fileManager)
+
+3. **Performance-Optimierung** (`cleanupTrackOrders`):
+   - N+1 Problem gefixt mit `Promise.all()` fuer parallele DB-Operationen
 
 ### Tests ✅
-- Upload mit kleiner Datei funktioniert
-- Progress-Anzeige funktioniert
-- Success-Message erscheint
-- `invalidateAll()` aktualisiert Song-Count
-- File Input wird nach Upload zurueckgesetzt
+- TrackList rendert korrekt (Tracks, Nummern, Delete-Buttons)
+- Delete-Button feuert `ondelete` Callback
+- UI mit DaisyUI sieht gut aus
+- Keine Console-Errors
+- TypeScript + Lint passed
+
+---
+
+## Session 2 (Abgeschlossen)
+
+### Upload mit Progress Refactor ✅
+- `src/routes/api/upload/+server.ts` - Upload API Endpoint
+- `src/lib/components/admin/UploadZone.svelte` - Progress Bar Komponente
+- XMLHttpRequest fuer Progress-Events
 
 ---
 
@@ -49,38 +79,66 @@
 
 ---
 
-## Naechste Session (Session 3)
+## Naechste Session (Session 4)
 
 ### Ziel
-Drag & Drop Track-Sortierung implementieren.
+Card Editor Komponente die TrackList + UploadZone orchestriert.
 
-### Tasks
-1. `bun add svelte-dnd-action` - Dependency installieren
-2. `src/lib/components/admin/TrackList.svelte` - Komponente mit DnD
-3. `src/lib/server/fileManager.ts` - `deleteSong()` implementieren
-4. DELETE Endpoint fuer Songs
-5. Chrome DevTools Tests
+### Wichtige Infos (aus ROADMAP.md)
+
+**TrackList Integration:**
+```typescript
+// Reorder: POST /api/cards/[cardId]/order
+async function handleReorder(order: string[]) {
+  await fetch(`/api/cards/${cardId}/order`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ trackOrder: order })
+  });
+}
+
+// Delete: DELETE /api/folders/[folderName]/songs/[filename]
+async function handleDelete(filename: string) {
+  await fetch(`/api/folders/${folderName}/songs/${filename}`, {
+    method: 'DELETE'
+  });
+}
+```
+
+**State Flow:**
+```
+CardEditor
+├── cardId, folderName (props oder geladen)
+├── songs: Song[] ($state)
+│
+├── <TrackList {songs} onreorder={handleReorder} ondelete={handleDelete} />
+├── <UploadZone {folderName} onupload={refreshSongs} />
+```
 
 ### Commit am Ende
 ```bash
-git commit -m "feat: ✨ add drag-drop track reordering"
+git commit -m "feat: ✨ add card editor component"
 ```
 
 ---
 
 ## Wichtige Dateien
 
-### Session 2 (Neu)
+### Session 3 (Neu)
+- `src/lib/components/admin/TrackList.svelte` - DnD Track-Liste
+- `src/routes/api/folders/[folderName]/songs/[filename]/+server.ts` - DELETE Endpoint
+
+### Session 3 (Geaendert)
+- `src/lib/server/fileManager.ts` - +deleteSong()
+- `dev/ROADMAP.md` - Session 4/5 Integration Notes
+
+### Session 2
 - `src/routes/api/upload/+server.ts` - Upload API Endpoint
 - `src/lib/components/admin/UploadZone.svelte` - Upload Komponente
 
-### Session 2 (Geaendert)
-- `src/routes/admin/+page.server.ts` - uploadMP3 Action entfernt
-- `src/routes/admin/+page.svelte` - UploadZone integriert
-
 ### Session 1
 - `src/lib/types.ts` - CardData Interface
-- `src/lib/server/database.ts` - 3 neue Funktionen
+- `src/lib/server/database.ts` - getCardData, setCardData, setTrackOrder
 - `src/lib/server/fileManager.ts` - sortSongsByOrder
 - `src/routes/api/cards/[cardId]/+server.ts`
 - `src/routes/api/cards/[cardId]/order/+server.ts`
@@ -91,19 +149,13 @@ git commit -m "feat: ✨ add drag-drop track reordering"
 
 ```
 src/lib/components/admin/
-└── UploadZone.svelte     # Session 2 ✅
-```
-
-Geplant fuer Session 3+:
-```
-src/lib/components/admin/
-├── UploadZone.svelte     # ✅
-├── TrackList.svelte      # Session 3
-└── CardEditor.svelte     # Session 4
+├── UploadZone.svelte     # Session 2 ✅
+├── TrackList.svelte      # Session 3 ✅
+└── CardEditor.svelte     # Session 4 (geplant)
 ```
 
 ---
 
 ## Git Status
 - Branch: main
-- Letzter Commit: Session 1 Track Order (`7573d06`)
+- Letzter Commit: Session 2 Upload Refactor (`30ece32`)

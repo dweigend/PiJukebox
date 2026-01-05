@@ -73,18 +73,18 @@ SvelteKit Form Actions unterstuetzen keine Upload-Progress-Events. Daher wird ei
    - Ruft `onupload` Callback nach erfolgreichem Upload auf
 
 ### Tasks
-- [ ] `src/routes/api/upload/+server.ts` - Upload Endpoint erstellen
-- [ ] `src/lib/components/admin/` Verzeichnis erstellen (falls nicht vorhanden)
-- [ ] `src/lib/components/admin/UploadZone.svelte` - Komponente implementieren
-- [ ] DaisyUI `file-input` mit `progress` Bar integrieren
-- [ ] XMLHttpRequest mit Progress Events implementieren
-- [ ] `bun run check` - TypeScript pruefen
-- [ ] Chrome DevTools MCP: Upload mit kleiner Datei testen
-- [ ] Chrome DevTools MCP: Upload mit grosser Datei (100MB+) testen
+- [x] `src/routes/api/upload/+server.ts` - Upload Endpoint erstellen
+- [x] `src/lib/components/admin/` Verzeichnis erstellen (falls nicht vorhanden)
+- [x] `src/lib/components/admin/UploadZone.svelte` - Komponente implementieren
+- [x] DaisyUI `file-input` mit `progress` Bar integrieren
+- [x] XMLHttpRequest mit Progress Events implementieren
+- [x] `bun run check` - TypeScript pruefen
+- [x] Chrome DevTools MCP: Upload mit kleiner Datei testen
+- [x] Chrome DevTools MCP: Upload mit grosser Datei (100MB+) testen
 
 ### Commit
 ```bash
-git commit -m "feat: add upload progress indicator"
+git commit -m "refactor: replace upload form action with API endpoint"
 ```
 
 ---
@@ -118,19 +118,19 @@ Fuer Drag & Drop wird die Library `svelte-dnd-action` verwendet. Diese bietet ei
    - DELETE: Loescht Song aus Ordner und aktualisiert ggf. trackOrder
 
 ### Tasks
-- [ ] `bun add svelte-dnd-action` - Dependency installieren
-- [ ] `src/lib/components/admin/TrackList.svelte` - Komponente implementieren
-- [ ] Drag & Drop mit `svelte-dnd-action` integrieren
-- [ ] Delete-Buttons pro Track hinzufuegen
-- [ ] `src/lib/server/fileManager.ts` - `deleteSong()` implementieren
-- [ ] `src/routes/api/folders/[folderName]/songs/[filename]/+server.ts` - DELETE Endpoint
+- [x] `bun add svelte-dnd-action` - Dependency installieren
+- [x] `src/lib/components/admin/TrackList.svelte` - Komponente implementieren
+- [x] Drag & Drop mit `svelte-dnd-action` integrieren
+- [x] Delete-Buttons pro Track hinzufuegen
+- [x] `src/lib/server/fileManager.ts` - `deleteSong()` implementieren
+- [x] `src/routes/api/folders/[folderName]/songs/[filename]/+server.ts` - DELETE Endpoint
 - [ ] `bun run check` - TypeScript pruefen
 - [ ] Chrome DevTools MCP: Drag & Drop testen
 - [ ] Chrome DevTools MCP: Song loeschen testen
 
 ### Commit
 ```bash
-git commit -m "feat: add drag-drop track reordering"
+git commit -m "feat: ✨ add TrackList component with drag-drop sorting"
 ```
 
 ---
@@ -142,6 +142,47 @@ Eine vollstaendige Card Editor Komponente wird erstellt, die alle bisherigen Kom
 
 ### Hintergrund
 Der CardEditor ist die zentrale Komponente des neuen Admin Panels. Er verwaltet den State fuer eine einzelne Karte und koordiniert die Kommunikation mit der API. Die Komponente kann sowohl fuer neue Karten (leerer State) als auch fuer existierende Karten (vorausgefuellter State) verwendet werden.
+
+### TrackList Integration (aus Session 3)
+
+**TrackList Props:**
+```typescript
+interface Props {
+  songs: Song[];
+  onreorder?: (order: string[]) => void;
+  ondelete?: (filename: string) => void;
+}
+```
+
+**API-Aufrufe fuer CardEditor:**
+```typescript
+// Reorder: Speichert neue Track-Reihenfolge
+async function handleReorder(order: string[]) {
+  await fetch(`/api/cards/${cardId}/order`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ trackOrder: order })
+  });
+}
+
+// Delete: Loescht Song + bereinigt trackOrder automatisch
+async function handleDelete(filename: string) {
+  await fetch(`/api/folders/${folderName}/songs/${filename}`, {
+    method: 'DELETE'
+  });
+  // Songs neu laden
+}
+```
+
+**State Flow:**
+```
+CardEditor
+├── cardId, folderName (props oder geladen)
+├── songs: Song[] ($state)
+│
+├── <TrackList {songs} onreorder={handleReorder} ondelete={handleDelete} />
+├── <UploadZone {folderName} onupload={refreshSongs} />
+```
 
 ### Technische Umsetzung
 1. **CardEditor Komponente** (`src/lib/components/admin/CardEditor.svelte`):

@@ -2,8 +2,8 @@
  * File manager for music folder operations
  */
 
-import { readdir, stat, mkdir, writeFile } from 'node:fs/promises';
-import { join } from 'node:path';
+import { readdir, stat, mkdir, writeFile, unlink } from 'node:fs/promises';
+import { join, basename, resolve } from 'node:path';
 import { formatTitle, sanitizeFilename } from '$lib/utils/formatters';
 import type { Folder, Song } from '$lib/types';
 
@@ -142,4 +142,34 @@ export function sortSongsByOrder(songs: Song[], order: string[]): Song[] {
 		const bIdx = orderMap.get(b.filename) ?? Infinity;
 		return aIdx - bIdx;
 	});
+}
+
+/**
+ * Delete a song file from a folder
+ * SECURITY: Sanitizes inputs to prevent path traversal attacks
+ */
+export async function deleteSong(folderName: string, filename: string): Promise<void> {
+	// SECURITY: Sanitize inputs - strip path components
+	const safeFolderName = basename(folderName);
+	const safeFilename = basename(filename);
+
+	// Validate MP3 extension
+	if (!safeFilename.toLowerCase().endsWith('.mp3')) {
+		throw new Error('Only MP3 files can be deleted');
+	}
+
+	const exists = await folderExists(safeFolderName);
+	if (!exists) {
+		throw new Error(`Folder "${safeFolderName}" not found`);
+	}
+
+	// Build and validate path stays within music directory
+	const filePath = resolve(MUSIC_DIR, safeFolderName, safeFilename);
+	const musicDirResolved = resolve(MUSIC_DIR);
+
+	if (!filePath.startsWith(musicDirResolved)) {
+		throw new Error('Invalid file path');
+	}
+
+	await unlink(filePath);
 }
